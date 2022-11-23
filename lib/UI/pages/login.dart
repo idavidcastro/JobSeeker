@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/registrarUsuario.dart';
+import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
 import '../../domain/models/usuario.dart';
 import 'app.dart';
@@ -19,6 +21,7 @@ class _LoginState extends State<Login> {
   TextEditingController controllerusuario = TextEditingController();
   TextEditingController controllercontrasena = TextEditingController();
   TextEditingController controllertipouser = TextEditingController();
+  Controllerauthf controlf = Get.find();
 
   @override
   Widget build(BuildContext context) {

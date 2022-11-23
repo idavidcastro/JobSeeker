@@ -1,6 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
 import '../../domain/models/usuario.dart';
 import 'login.dart';
@@ -16,10 +22,11 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   String? valueChoose = 'Empleado';
 
   final List<Usuario> _usuarioadd = [];
-  TextEditingController controlusuario = TextEditingController();
   TextEditingController controlcontrasena = TextEditingController();
   TextEditingController controltipousuario = TextEditingController();
   TextEditingController controlcorreoelectronico = TextEditingController();
+  //Controllerauthf controlff = Get.find();
+  final firebase = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -50,16 +57,16 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
                 child: TextFormField(
-                  controller: controlusuario,
+                  controller: controlcorreoelectronico,
                   decoration: InputDecoration(
                       filled: true,
-                      labelText: 'Usuario',
-                      icon: const Icon(Icons.person),
+                      labelText: 'Correo electronico',
+                      icon: const Icon(Icons.message),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          controlusuario.clear();
+                          controlcorreoelectronico.clear();
                         },
                       )
                       //probar suffix
@@ -87,90 +94,47 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextFormField(
-                  controller: controlcorreoelectronico,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Correo electronico',
-                      icon: const Icon(Icons.message),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlcorreoelectronico.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: MaterialButton(
                   elevation: 10.0,
                   onPressed: () {
-                    if (controlusuario.text.isNotEmpty &&
-                        controlcontrasena.text.isNotEmpty &&
+                    if (controlcontrasena.text.isNotEmpty &&
                         controlcorreoelectronico.text.isNotEmpty) {
+                      registrarUsuario(
+                          valueChoose.toString(),
+                          controlcorreoelectronico.text,
+                          controlcontrasena.text);
+                      Get.offAllNamed('/login');
+
                       // Agregar a la lista los valores de cada texto
-
-                      listaUsuarios.add(Usuario(
-                          tipo_usuario: valueChoose,
-                          usuario: controlusuario.text,
-                          contrasena: controlcontrasena.text,
-                          correo_electronico: controlcorreoelectronico.text));
-
-                      // dialogo
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text('Nuevo Usuario'),
-                                content:
-                                    const Text('Se ha guardado correctamente.'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => const Login()),
-                                        );
-                                        setState(() {});
-                                        //Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Ok',
-                                        style: TextStyle(color: Colors.black),
-                                      ))
-                                ],
-                              ));
-
-                      // Devuelvo los datos de la lista _usuarioadd
-                      /*
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ListarUsuario())); //Llamar la Vista
+/*
+                      controlff
+                          .registrarEmail(controlcorreoelectronico.text,
+                              controlcontrasena.text)
+                          .then((value) {
+                        if (controlff.emailf != 'Sin registro') {
+                          Get.offAllNamed('/login');
+                        } else {
+                          Get.showSnackbar(const GetSnackBar(
+                            title: 'Validación de usuarios',
+                            message:
+                                'ERROR! El usuario no existe en la base de datos',
+                            icon: Icon(Icons.warning_amber_sharp),
+                            duration: Duration(seconds: 4),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
+                      }).catchError((onError) {
+                        Get.showSnackbar(const GetSnackBar(
+                          title: 'Validación de usuarios',
+                          message:
+                              'ERROR! El usuario no existe en la base de datos',
+                          icon: Icon(Icons.warning_amber_sharp),
+                          duration: Duration(seconds: 4),
+                          backgroundColor: Colors.red,
+                        ));
+                      });
                       */
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text('Error'),
-                                content: const Text('Registre los campos'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {});
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Ok',
-                                        style: TextStyle(color: Colors.black),
-                                      ))
-                                ],
-                              ));
                     }
                   },
                   shape: RoundedRectangleBorder(
@@ -209,5 +173,19 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
         textAlign: TextAlign.center,
       ),
     );
+  }
+
+  registrarUsuario(String tipousuario, String correo, String passwd) async {
+    try {
+      await firebase.collection('Users').doc().set({
+        "tipousuario": tipousuario,
+        "correo": correo,
+        "contraseña": passwd,
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error...' + e.toString());
+      }
+    }
   }
 }
