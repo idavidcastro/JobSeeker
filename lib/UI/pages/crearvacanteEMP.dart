@@ -16,6 +16,7 @@ class AdicionarVacantes extends StatefulWidget {
 
 class _AdicionarVacantesState extends State<AdicionarVacantes> {
   List<Vacante> _vacanteAdd = [];
+  TextEditingController controlid = TextEditingController();
   TextEditingController controlEmpresa = TextEditingController();
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
@@ -34,6 +35,26 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
           child: Column(
             children: [
               _titulo(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+                child: TextField(
+                  controller: controlid,
+                  decoration: InputDecoration(
+                      filled: true,
+                      //hintText: 'Tipo Usuario',
+                      labelText: 'id',
+                      icon: const Icon(Icons.numbers),
+                      // suffix: Icon(Icons.access_alarm),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controlEmpresa.clear();
+                        },
+                      )
+                      //probar suffix
+                      ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
                 child: TextField(
@@ -117,7 +138,8 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 child: MaterialButton(
                   elevation: 10.0,
                   onPressed: () {
-                    if (controlEmpresa.text.isNotEmpty &&
+                    if (controlid.text.isNotEmpty &&
+                        controlEmpresa.text.isNotEmpty &&
                         controlCargo.text.isNotEmpty &&
                         controlSalario.text.isNotEmpty &&
                         controlCiudad.text.isNotEmpty) {
@@ -192,6 +214,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   }
 
   _limpiar() {
+    controlid.text = '';
     controlEmpresa.text = '';
     controlCargo.text = '';
     controlSalario.text = '';
@@ -213,6 +236,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   crearvacantes() async {
     try {
       await firebase.collection('Vacantes').doc().set({
+        "id": controlid,
         "empresa": controlEmpresa,
         "cargo": controlCargo,
         "salario": controlSalario,
