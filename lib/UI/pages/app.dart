@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../routes/routes.dart';
 import '../../routes/routes2.dart';
 import 'login.dart';

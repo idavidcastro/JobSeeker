@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/registrarUsuario.dart';
@@ -126,6 +127,7 @@ class _LoginState extends State<Login> {
       // ignore: sort_child_properties_last
       child: MaterialButton(
         onPressed: () {
+          /*
           String user = controllerusuario.text;
           String password = controllercontrasena.text;
           bool validacion = false;
@@ -175,7 +177,7 @@ class _LoginState extends State<Login> {
                       ],
                     ));
           }
-
+            */
           /*
           if (encontrarUsuario(context, controllerusuario, controllercontrasena) ==true) {
             Navigator.push(
