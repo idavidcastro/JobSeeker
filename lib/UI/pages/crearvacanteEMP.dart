@@ -48,7 +48,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          controlEmpresa.clear();
+                          controlid.clear();
                         },
                       )
                       //probar suffix
@@ -236,11 +236,11 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   crearvacantes() async {
     try {
       await firebase.collection('Vacantes').doc().set({
-        "id": controlid,
-        "empresa": controlEmpresa,
-        "cargo": controlCargo,
-        "salario": controlSalario,
-        "ciudad": controlCiudad,
+        "id": controlid.text,
+        "empresa": controlEmpresa.text,
+        "cargo": controlCargo.text,
+        "salario": controlSalario.text,
+        "ciudad": controlCiudad.text,
       });
     } catch (e) {
       if (kDebugMode) {
