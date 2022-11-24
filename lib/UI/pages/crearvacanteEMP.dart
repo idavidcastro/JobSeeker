@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../../domain/models/vacante.dart';
 
 class AdicionarVacantes extends StatefulWidget {
@@ -17,7 +20,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
   TextEditingController controlCiudad = TextEditingController();
-
+  final firebase = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,11 +123,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                         controlCiudad.text.isNotEmpty) {
                       // Agregar a la lista los valores de cada texto
 
-                      _vacanteAdd.add(Vacante(
-                          empresa: controlEmpresa.text,
-                          cargo: controlCargo.text,
-                          salario: controlSalario.text,
-                          ciudad: controlCiudad.text));
+                      crearvacantes();
 
                       // dialogo
                       showDialog(
@@ -209,5 +208,20 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         textAlign: TextAlign.center,
       ),
     );
+  }
+
+  crearvacantes() async {
+    try {
+      await firebase.collection('Vacantes').doc().set({
+        "empresa": controlEmpresa,
+        "cargo": controlCargo,
+        "salario": controlSalario,
+        "ciudad": controlCiudad,
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error...' + e.toString());
+      }
+    }
   }
 }
