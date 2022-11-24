@@ -19,9 +19,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final List<Usuario> _usuarios = listaUsuarios;
-  TextEditingController controllerusuario = TextEditingController();
+  TextEditingController controllercorreo = TextEditingController();
   TextEditingController controllercontrasena = TextEditingController();
-  TextEditingController controllertipouser = TextEditingController();
+  //TextEditingController controllertipouser = TextEditingController();
   Controllerauthf controlf = Get.find();
 
   @override
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _userTextField(),
+              child: _correoTextField(),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _userTextField() {
+  Widget _correoTextField() {
     return StreamBuilder(
         builder: (BuildContext context, AsyncSnapshot snapshot) {
       return Container(
@@ -85,13 +85,13 @@ class _LoginState extends State<Login> {
         child: TextField(
             cursorColor: Colors.black,
             keyboardType: TextInputType.emailAddress,
-            controller: controllerusuario,
+            controller: controllercorreo,
             decoration: const InputDecoration(
               icon: Icon(
                 Icons.person,
                 color: Colors.black,
               ),
-              labelText: 'Usuario',
+              labelText: 'Correo',
             ),
             onChanged: (value) {}),
       );
@@ -127,40 +127,9 @@ class _LoginState extends State<Login> {
       // ignore: sort_child_properties_last
       child: MaterialButton(
         onPressed: () {
-          /*
-          String user = controllerusuario.text;
-          String password = controllercontrasena.text;
-          bool validacion = false;
-
-          if (user.isNotEmpty && password.isNotEmpty) {
-            for (var item in _usuarios) {
-              if (item.usuario == user && item.contrasena == password) {
-                validacion = true;
-                if (item.tipo_usuario == 'Empleado') {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => const Home()));
-                } else {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const Home2()));
-                }
-              }
-            }
-            if (validacion == false) {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: const Text('Error'),
-                        content: const Text('El usuario no está registrado'),
-                        actions: <Widget>[
-                          MaterialButton(
-                            child: const Text('Ok'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      ));
-            }
+          if (controllercorreo.text.isNotEmpty &&
+              controllercontrasena.text.isNotEmpty) {
+            validarDatos();
           } else {
             showDialog(
                 context: context,
@@ -177,13 +146,6 @@ class _LoginState extends State<Login> {
                       ],
                     ));
           }
-            */
-          /*
-          if (encontrarUsuario(context, controllerusuario, controllercontrasena) ==true) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const Home()));
-          }
-          */
         },
         child: const Text('Iniciar sesion',
             style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -198,11 +160,51 @@ class _LoginState extends State<Login> {
     );
   }
 
+  validarDatos() async {
+    bool validacion = false;
+    try {
+      CollectionReference ref = FirebaseFirestore.instance.collection('Users');
+      QuerySnapshot usuario = await ref.get();
+
+      if (usuario.docs.length != 0) {
+        for (var cursor in usuario.docs) {
+          if (cursor.get('correo') == controllercorreo.text.trim() &&
+              cursor.get('contraseña') == controllercontrasena.text.trim()) {
+            validacion = true;
+            if (cursor.get('tipousuario') == 'Empleado') {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => const Home()));
+            } else {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => const Home2()));
+            }
+          }
+        }
+        if (validacion == false) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('El usuario no está registrado'),
+                    actions: <Widget>[
+                      MaterialButton(
+                        child: const Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ],
+                  ));
+        }
+      }
+    } catch (e) {}
+  }
+  /*
   encontrarUsuario(BuildContext context, TextEditingController controlUser,
       TextEditingController controlPassword) {
     String user = controlUser.text;
     String password = controlPassword.text;
-    String tipo_usuario = controllertipouser.text;
+    //String tipo_usuario = controllertipouser.text;
 
     if (user.isNotEmpty && password.isNotEmpty) {
       for (var item in _usuarios) {
@@ -249,7 +251,7 @@ class _LoginState extends State<Login> {
               ));
     }
     return false;
-  }
+  }*/
 }
 
 Widget _bottonRegistrar() {
