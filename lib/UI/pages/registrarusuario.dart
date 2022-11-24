@@ -101,40 +101,11 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                     if (controlcontrasena.text.isNotEmpty &&
                         controlcorreoelectronico.text.isNotEmpty) {
                       registrarUsuario(
-                          valueChoose.toString(),
-                          controlcorreoelectronico.text,
-                          controlcontrasena.text);
-                      Get.offAllNamed('/login');
-
-                      // Agregar a la lista los valores de cada texto
-/*
-                      controlff
-                          .registrarEmail(controlcorreoelectronico.text,
-                              controlcontrasena.text)
-                          .then((value) {
-                        if (controlff.emailf != 'Sin registro') {
-                          Get.offAllNamed('/login');
-                        } else {
-                          Get.showSnackbar(const GetSnackBar(
-                            title: 'Validación de usuarios',
-                            message:
-                                'ERROR! El usuario no existe en la base de datos',
-                            icon: Icon(Icons.warning_amber_sharp),
-                            duration: Duration(seconds: 4),
-                            backgroundColor: Colors.red,
-                          ));
-                        }
-                      }).catchError((onError) {
-                        Get.showSnackbar(const GetSnackBar(
-                          title: 'Validación de usuarios',
-                          message:
-                              'ERROR! El usuario no existe en la base de datos',
-                          icon: Icon(Icons.warning_amber_sharp),
-                          duration: Duration(seconds: 4),
-                          backgroundColor: Colors.red,
-                        ));
-                      });
-                      */
+                          valueChoose.toString().trim(),
+                          controlcorreoelectronico.text.trim(),
+                          controlcontrasena.text.trim());
+                      controlcontrasena.clear();
+                      controlcorreoelectronico.clear();
                     }
                   },
                   shape: RoundedRectangleBorder(
@@ -176,16 +147,60 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   }
 
   registrarUsuario(String tipousuario, String correo, String passwd) async {
+    bool encontrar = false;
     try {
-      await firebase.collection('Users').doc().set({
-        "tipousuario": tipousuario,
-        "correo": correo,
-        "contraseña": passwd,
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error...' + e.toString());
+      CollectionReference ref = FirebaseFirestore.instance.collection('Users');
+      QuerySnapshot usuario = await ref.get();
+
+      if (usuario.docs.length != 0) {
+        for (var cursor in usuario.docs) {
+          if (cursor.get('correo') == correo) {
+            encontrar = true;
+          }
+        }
+        if (encontrar == true) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('El usuario ya está registrado'),
+                    actions: <Widget>[
+                      MaterialButton(
+                        child: const Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ],
+                  ));
+        } else {
+          try {
+            await firebase.collection('Users').doc().set({
+              "tipousuario": tipousuario,
+              "correo": correo,
+              "contraseña": passwd,
+            });
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text('Nuevo Usuario'),
+                      content: const Text('Usuario nuevo registrado'),
+                      actions: <Widget>[
+                        MaterialButton(
+                          child: const Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error...' + e.toString());
+            }
+          }
+        }
       }
-    }
+    } catch (e) {}
   }
 }
