@@ -12,7 +12,7 @@ class Bienvenida extends StatefulWidget {
 }
 
 class _BienvenidaState extends State<Bienvenida> {
-  final List _vacantes = listaVacantes;
+  //final List _vacantes = listaVacantes;
   int _currentTabIndex = 0;
   late bool _value = false;
   late bool _value2 = false;

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jobseeker/UI/pages/login.dart';
 
+import '../../domain/controller/controllerfirebase.dart';
 import '../../domain/models/vacante.dart';
 
 class ListaPrincipalEmpreador extends StatefulWidget {
@@ -11,12 +14,14 @@ class ListaPrincipalEmpreador extends StatefulWidget {
 }
 
 class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
-  final List _vacantes = listaVacantes;
+  //final List _vacantes = listaVacantes;
   late bool _value = false;
   late bool _value2 = false;
 
   @override
   Widget build(BuildContext context) {
+    ConsultasController controladorvacante = Get.find();
+    controladorvacante.consultaVacantes().then((value) => null);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -58,6 +63,74 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
               _value = false;
               _value2 = false;
             }),
+        body: Obx(
+          () => controladorvacante.getVacantesGral?.isEmpty == false
+              ? ListView.builder(
+                  itemCount: controladorvacante.getVacantesGral?.isEmpty == true
+                      ? 0
+                      : controladorvacante.getVacantesGral!.length,
+                  itemBuilder: (context, posicion) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: const <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black,
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 8.0,
+                            )
+                          ],
+                          //border: Border.all(color: Colors.black, width: 6.0)
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 12, 15, 0),
+                              child: Text(controladorvacante
+                                  .getVacantesGral![posicion].empresa),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 2),
+                              child: Text(
+                                  controladorvacante
+                                      .getVacantesGral![posicion].cargo,
+                                  style: const TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 2),
+                              child: Text(controladorvacante
+                                  .getVacantesGral![posicion].salario),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 12),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on,
+                                    size: 15.0,
+                                  ),
+                                  Text(controladorvacante
+                                      .getVacantesGral![posicion].ciudad),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
+              : const Icon(Icons.abc),
+        ),
+        /*
         body: ListView(
           children: [
             Padding(
@@ -135,82 +208,8 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-              child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: const <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black,
-                        offset: Offset(2.0, 2.0),
-                        blurRadius: 8.0,
-                      )
-                    ],
-                    //border: Border.all(color: Colors.black, width: 6.0)
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                child: Text('Grupo Aval'),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                child: Text('Economista',
-                                    style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                child: Text('2.000.000'),
-                              ),
-                              // ignore: unnecessary_const
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: Row(
-                                  children: const <Widget>[
-                                    Icon(
-                                      Icons.location_on,
-                                      size: 15.0,
-                                    ),
-                                    Text('Bogotá, CO'),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Checkbox(
-                                activeColor: Colors.black,
-                                value: _value2,
-                                onChanged: (val) {
-                                  setState(() {
-                                    _value2 = val!;
-                                  });
-                                }),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-            ),
           ],
-        ),
+        ),*/
       ),
     );
   }
@@ -225,7 +224,7 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      _vacantes.remove(vacante);
+                      //_vacantes.remove(vacante);
                       setState(() {});
                       Navigator.pop(context);
                     },

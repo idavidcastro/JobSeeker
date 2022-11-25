@@ -16,6 +16,7 @@ void main() async {
               messagingSenderId: "678613439451",
               appId: "1:678613439451:web:b5ac4dc5e2748fad650dfe"))
       : await Firebase.initializeApp();
-  Get.put(Controllerauthf());
+  //Get.put(Controllerauthf());
+  Get.put(ConsultasController());
   runApp(const App());
 }

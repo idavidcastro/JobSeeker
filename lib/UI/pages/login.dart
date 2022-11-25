@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
   TextEditingController controllercorreo = TextEditingController();
   TextEditingController controllercontrasena = TextEditingController();
   //TextEditingController controllertipouser = TextEditingController();
-  Controllerauthf controlf = Get.find();
+  //Controllerauthf controlf = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +173,10 @@ class _LoginState extends State<Login> {
             validacion = true;
             if (cursor.get('tipousuario') == 'Empleado') {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Home()));
+                  context, MaterialPageRoute(builder: (_) => const Home()));
             } else {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Home2()));
+                  context, MaterialPageRoute(builder: (_) => const Home2()));
               print(controllercorreo.text);
             }
           }

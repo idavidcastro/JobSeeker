@@ -10,7 +10,7 @@ class PageBusqueda extends StatefulWidget {
 }
 
 class _PageBusquedaState extends State<PageBusqueda> {
-  final List _vacantes = listaVacantes;
+  //final List _vacantes = listaVacantes;
   late bool _value = false;
   late bool _value2 = false;
   late bool _value3 = false;

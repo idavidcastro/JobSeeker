@@ -1,26 +1,33 @@
 class Vacante {
-  var empresa;
-  var cargo;
-  var salario;
-  var ciudad;
+  final String idVacante;
+  final String empresa;
+  final String cargo;
+  final String salario;
+  final String ciudad;
 
-  Vacante({this.empresa, this.cargo, this.salario, this.ciudad});
+  Vacante({
+    required this.idVacante,
+    required this.empresa,
+    required this.cargo,
+    required this.salario,
+    required this.ciudad,
+  });
+
+  factory Vacante.desdeDoc(Map<String, dynamic> data) {
+    return Vacante(
+      idVacante: data['id'] ?? '',
+      empresa: data['empresa'] ?? '',
+      cargo: data['cargo'] ?? '',
+      salario: data['salario'] ?? '',
+      ciudad: data['ciudad'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "id": idVacante,
+        "empresa": empresa,
+        "cargo": cargo,
+        "salario": salario,
+        "ciudad": ciudad,
+      };
 }
-
-List<Vacante> listaVacantes = [
-  Vacante(
-      empresa: 'Apple',
-      cargo: 'Diseñador Gráfico',
-      salario: '3.000.000',
-      ciudad: 'Los Angeles, CA'),
-  Vacante(
-      empresa: 'Grupo Aval',
-      cargo: 'Ingeniero de Sistemas',
-      salario: '5.000.000',
-      ciudad: 'Valledupar, CO'),
-  Vacante(
-      empresa: 'Movistar',
-      cargo: 'Asesor',
-      salario: '1.500.000',
-      ciudad: 'Bogotá, CO'),
-];

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,8 +7,7 @@ import '../../domain/models/vacante.dart';
 import 'login.dart';
 
 class AdicionarVacantes extends StatefulWidget {
-  final String correo;
-  const AdicionarVacantes(this.correo, {Key? key}) : super(key: key);
+  const AdicionarVacantes({Key? key}) : super(key: key);
 
   @override
   State<AdicionarVacantes> createState() => _AdicionarVacantesState();
