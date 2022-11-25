@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'editarConfigEMP.dart';
 import 'login.dart';
 
@@ -10,6 +14,18 @@ class PageConfig2 extends StatefulWidget {
 }
 
 class _PageConfig2State extends State<PageConfig2> {
+  var _image;
+  ImagePicker picker = ImagePicker();
+
+  _camGaleria(bool op) async {
+    XFile? image;
+    image = op
+        ? await picker.pickImage(source: ImageSource.camera, imageQuality: 50)
+        : await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      _image = (image != null) ? File(image.path) : null;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,15 +36,42 @@ class _PageConfig2State extends State<PageConfig2> {
         backgroundColor: Colors.black,
         title: const Text('PERFIL'),
       ),
-      body: ListView(
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 70.0,
+     body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: ListView(children: [
+            Center(
+              child: GestureDetector(
+                onTap: () async {
+                  _opcioncamara(context);
+                },
+                child: CircleAvatar(
+                  radius: 70,
+                  backgroundColor: Colors.black,
+                  child: _image != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(48),
+                          child: Image.file(
+                            _image,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(48),
+                          ),
+                          width: 100,
+                          height: 100,
+                          child: const Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+              ),
             ),
-          ),
           const Divider(),
           Column(
             children: const [
@@ -199,8 +242,36 @@ class _PageConfig2State extends State<PageConfig2> {
               ],
             ),
           )
-        ],
+        ]
       ),
-    ));
+    ),),);
+  }
+  void _opcioncamara(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Imagen de Galeria'),
+                    onTap: () {
+                      _camGaleria(false);
+                      Get.back();
+                      // Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Capturar Imagen'),
+                  onTap: () {
+                    _camGaleria(true);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

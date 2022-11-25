@@ -34,6 +34,11 @@ class _LoginState extends State<Login> {
         ),
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage(
+                  "https://thumbs.dreamstime.com/b/vector-graphic-initials-letter-js-logo-design-template-emblem-hexagon-204622912.jpg"),
+            ),
             Padding(
               padding: const EdgeInsets.all(40.0),
               child: _nombre(),

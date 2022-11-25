@@ -15,6 +15,14 @@ class AdicionarVacantes extends StatefulWidget {
 
 class _AdicionarVacantesState extends State<AdicionarVacantes> {
   List<Vacante> _vacanteAdd = [];
+  List<String> list = [
+    'Valledupar',
+    'Barranquilla ',
+    'Santa Marta ',
+    'Cartagena',
+    'Bogota '
+  ];
+  String? valueChoose = 'Valledupar';
 
   TextEditingController controlid = TextEditingController();
   TextEditingController controlEmpresa = TextEditingController();
@@ -117,22 +125,28 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextField(
-                  controller: controlCiudad,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Ciudad',
-                      icon: const Icon(Icons.location_on),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlCiudad.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
+                padding: const EdgeInsets.fromLTRB(50, 40, 50, 0),
+                child: DropdownButton(
+                  borderRadius: BorderRadius.circular(20.0),
+                  hint: Text(' Seleccione su Ciudad'),
+                  isExpanded: true,
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                  value: valueChoose,
+                  icon: const Icon(Icons.location_city),
+                  underline: Container(
+                    height: 4,
+                    width: 30,
+                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      valueChoose = value;
+                    });
+                  },
+                  items: list.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem(value: value, child: Text(value));
+                  }).toList(),
                 ),
               ),
               Padding(
