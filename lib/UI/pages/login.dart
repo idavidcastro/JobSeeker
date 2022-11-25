@@ -173,10 +173,11 @@ class _LoginState extends State<Login> {
             validacion = true;
             if (cursor.get('tipousuario') == 'Empleado') {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const Home()));
+                  context, MaterialPageRoute(builder: (_) => Home()));
             } else {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const Home2()));
+                  context, MaterialPageRoute(builder: (_) => Home2()));
+              print(controllercorreo.text);
             }
           }
         }

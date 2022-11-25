@@ -6,9 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../domain/models/vacante.dart';
+import 'login.dart';
 
 class AdicionarVacantes extends StatefulWidget {
-  const AdicionarVacantes({Key? key}) : super(key: key);
+  final String correo;
+  const AdicionarVacantes(this.correo, {Key? key}) : super(key: key);
 
   @override
   State<AdicionarVacantes> createState() => _AdicionarVacantesState();
@@ -16,12 +18,15 @@ class AdicionarVacantes extends StatefulWidget {
 
 class _AdicionarVacantesState extends State<AdicionarVacantes> {
   List<Vacante> _vacanteAdd = [];
+
   TextEditingController controlid = TextEditingController();
   TextEditingController controlEmpresa = TextEditingController();
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
   TextEditingController controlCiudad = TextEditingController();
   final firebase = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

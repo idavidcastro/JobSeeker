@@ -175,10 +175,13 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   ));
         } else {
           try {
-            await firebase.collection('Users').doc().set({
+            String id = FirebaseFirestore.instance.collection('Users').doc().id;
+            print(id);
+            await firebase.collection('Users').doc(id).set({
               "tipousuario": tipousuario,
               "correo": correo,
               "contraseña": passwd,
+              "id": id,
             });
             showDialog(
                 context: context,
