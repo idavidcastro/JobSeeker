@@ -21,6 +21,14 @@ class _PageBusquedaState extends State<PageBusqueda> {
   late bool _value3 = false;
 
   void searchFromFirebase(String query) async {
+    /* List<String> VacantesSearchList = [];
+
+    String temp = "";
+    for (int i = 0; i < query.length; i++) {
+      temp = temp + query[i];
+      VacantesSearchList.add(temp);
+    }
+    return VacantesSearchList;*/
     final result = await FirebaseFirestore.instance
         .collection('Vacantes')
         .where('cargo', arrayContains: query)
@@ -33,23 +41,30 @@ class _PageBusquedaState extends State<PageBusqueda> {
     ConsultasController controladorvacante = Get.find();
     controladorvacante.consultaVacantes().then((value) => null);
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: "BUSCAR",
-            fillColor: Color(Colors.white.blue),
-            icon: Icon(Icons.search),
-            iconColor: Color(Colors.white.green),
-            hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onChanged: (query) {
-            searchFromFirebase(query);
-          },
-        ),
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colors.green,
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "BUSCAR",
+                ),
+                onChanged: (String query) {
+                  searchFromFirebase(query);
+                },
+              )),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: searchResult.length,
+                  itemBuilder: ((context, index) {
+                    return ListTile(
+                      title: Text(searchResult[index]['cargo']),
+                      subtitle: Text(searchResult[index]['salario']),
+                    );
+                  })))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
