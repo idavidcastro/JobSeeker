@@ -47,7 +47,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
             children: [
               _titulo(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
                   controller: controlid,
                   decoration: InputDecoration(
@@ -67,7 +67,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
                   controller: controlEmpresa,
                   decoration: InputDecoration(
@@ -87,7 +87,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
                   controller: controlCargo,
                   decoration: InputDecoration(
@@ -106,7 +106,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
                   controller: controlSalario,
                   keyboardType: TextInputType.number,
@@ -126,10 +126,9 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 40, 50, 0),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(20.0),
-                  hint: Text(' Seleccione su Ciudad'),
                   isExpanded: true,
                   style: TextStyle(
                     fontSize: 15,

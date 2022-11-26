@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class postuladosemp extends StatelessWidget {
@@ -7,6 +5,12 @@ class postuladosemp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(' POSTULADOS'),
+        backgroundColor: Colors.black,
+      ),
+    );
   }
 }

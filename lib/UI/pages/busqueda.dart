@@ -41,7 +41,11 @@ class _PageBusquedaState extends State<PageBusqueda> {
     ConsultasController controladorvacante = Get.find();
     controladorvacante.consultaVacantes().then((value) => null);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('BUSQUEDA'),
+        backgroundColor: Colors.black,
+      ),
       body: Column(
         children: [
           Padding(
