@@ -7,7 +7,8 @@ import 'app.dart';
 import 'descripcionEMP.dart';
 
 class PageBusqueda extends StatefulWidget {
-  const PageBusqueda({Key? key}) : super(key: key);
+  final TextEditingController correo;
+  const PageBusqueda(this.correo, {Key? key}) : super(key: key);
 
   @override
   State<PageBusqueda> createState() => _PageBusquedaState();
@@ -45,6 +46,7 @@ class _PageBusquedaState extends State<PageBusqueda> {
         centerTitle: true,
         title: const Text('BUSQUEDA'),
         backgroundColor: Colors.black,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -83,10 +85,6 @@ class _PageBusquedaState extends State<PageBusqueda> {
                       actions: [
                         TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const Home()),
-                              );
                               setState(() {});
                               //Navigator.pop(context);
                             },

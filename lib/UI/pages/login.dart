@@ -177,11 +177,11 @@ class _LoginState extends State<Login> {
               cursor.get('contraseña') == controllercontrasena.text.trim()) {
             validacion = true;
             if (cursor.get('tipousuario') == 'Empleado') {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const Home()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => Home(controllercorreo)));
             } else {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
               print(controllercorreo.text);
             }
           }
@@ -205,59 +205,6 @@ class _LoginState extends State<Login> {
       }
     } catch (e) {}
   }
-  /*
-  encontrarUsuario(BuildContext context, TextEditingController controlUser,
-      TextEditingController controlPassword) {
-    String user = controlUser.text;
-    String password = controlPassword.text;
-    //String tipo_usuario = controllertipouser.text;
-
-    if (user.isNotEmpty && password.isNotEmpty) {
-      for (var item in _usuarios) {
-        if (item.usuario == user && item.contrasena == password) {
-          if (item.tipo_usuario == 'Empleado') {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const Home()));
-          } else {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const Home2()));
-          }
-        } else {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text('Verifique el usuario y contraseña'),
-                    actions: <Widget>[
-                      MaterialButton(
-                        child: const Text('Ok'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
-                  ));
-        }
-      }
-      ;
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: const Text('Verifique el usuario y contraseña'),
-                actions: <Widget>[
-                  MaterialButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
-    }
-    return false;
-  }*/
 }
 
 Widget _bottonRegistrar() {

@@ -23,7 +23,8 @@ class App extends StatelessWidget {
 //---------------------------------------------------------------------------
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final TextEditingController correo;
+  const Home(this.correo, {Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      body: Routes(index: index),
+      body: Routes(widget.correo, index: index),
     );
   }
 }

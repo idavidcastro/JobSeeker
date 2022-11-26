@@ -5,6 +5,7 @@ import 'package:jobseeker/UI/pages/login.dart';
 
 import '../../domain/controller/controllerfirebase.dart';
 import '../../domain/models/vacante.dart';
+import 'descripcion.dart';
 
 class ListaPrincipalEmpreador extends StatefulWidget {
   const ListaPrincipalEmpreador({Key? key}) : super(key: key);
