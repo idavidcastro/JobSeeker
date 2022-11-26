@@ -30,7 +30,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         backgroundColor: Colors.black,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Busqueda'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Mis Postulaciones'),
           BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Perfil'),
         ]);
   }
