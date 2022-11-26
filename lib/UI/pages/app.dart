@@ -53,7 +53,8 @@ class _HomeState extends State<Home> {
 
 //-----------------------------------------------------------------------
 class Home2 extends StatefulWidget {
-  const Home2({Key? key}) : super(key: key);
+  final TextEditingController correo;
+  const Home2(this.correo, {Key? key}) : super(key: key);
 
   @override
   State<Home2> createState() => _Home2State();
@@ -76,7 +77,7 @@ class _Home2State extends State<Home2> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: myBNB,
-      body: Routes2(index: index),
+      body: Routes2(widget.correo, index: index),
     );
   }
 }

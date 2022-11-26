@@ -7,7 +7,8 @@ import '../../domain/models/vacante.dart';
 import 'login.dart';
 
 class AdicionarVacantes extends StatefulWidget {
-  const AdicionarVacantes({Key? key}) : super(key: key);
+  final TextEditingController correo;
+  const AdicionarVacantes(this.correo, {Key? key}) : super(key: key);
 
   @override
   State<AdicionarVacantes> createState() => _AdicionarVacantesState();

@@ -181,7 +181,7 @@ class _LoginState extends State<Login> {
                   context, MaterialPageRoute(builder: (_) => const Home()));
             } else {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const Home2()));
+                  context, MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
               print(controllercorreo.text);
             }
           }
