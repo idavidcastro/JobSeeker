@@ -23,7 +23,7 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
   @override
   Widget build(BuildContext context) {
     ConsultasController controladorvacante = Get.find();
-    controladorvacante.consultaVacantes().then((value) => null);
+    //controladorvacante.consultaVacantes().then((value) => null);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

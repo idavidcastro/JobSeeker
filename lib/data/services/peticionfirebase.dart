@@ -58,4 +58,21 @@ class PeticionesVacanates {
 
     return lista;
   }
+
+  static Future<List<Vacante>> consultarGralFiltro(String cargo) async {
+    List<Vacante> lista = [];
+    await _db
+        .collection("Vacantes")
+        .where("cargo" == cargo)
+        .get()
+        .then((respuesta) {
+      for (var doc in respuesta.docs) {
+        log(doc.data().toString());
+        lista.add(Vacante.desdeDoc(doc.data()));
+      }
+    });
+    //print(lista);
+
+    return lista;
+  }
 }
