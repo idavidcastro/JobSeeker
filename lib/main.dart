@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/app.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
+import 'domain/controller/controladorAuth.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GetPlatform.isWeb
@@ -16,7 +18,7 @@ void main() async {
               messagingSenderId: "678613439451",
               appId: "1:678613439451:web:b5ac4dc5e2748fad650dfe"))
       : await Firebase.initializeApp();
-  //Get.put(Controllerauthf());
+  Get.put(Controllerauthf());
   Get.put(ConsultasController());
   runApp(const App());
 }

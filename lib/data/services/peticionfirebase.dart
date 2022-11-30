@@ -1,11 +1,16 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:jobseeker/domain/models/vacante.dart';
+
+import '../../domain/controller/controladorAuth.dart';
 
 class PeticionesVacanates {
   //static final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static Controllerauthf controlf = Get.find();
+  //String uid = controlf.uid;
   /*
   static Future<void> crearArticulo(Map<String, dynamic> catalogo, foto) async {
     var url = '';
@@ -47,9 +52,14 @@ class PeticionesVacanates {
     //return true;
   }
   */
-  static Future<List<Vacante>> consultarGral() async {
+  static Future<List<Vacante>> consultarGralEMP() async {
     List<Vacante> lista = [];
-    await _db.collection("Vacantes").get().then((respuesta) {
+    await _db
+        .collection("Usuarios")
+        .doc(controlf.uid)
+        .collection('Vacantes')
+        .get()
+        .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data().toString());
         lista.add(Vacante.desdeDoc(doc.data()));

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/registrarUsuario.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
+import '../../domain/controller/controladorAuth.dart';
 import '../../domain/models/usuario.dart';
 import 'app.dart';
 import 'recuperarpasswd.dart';
@@ -22,7 +23,7 @@ class _LoginState extends State<Login> {
   TextEditingController controllercorreo = TextEditingController();
   TextEditingController controllercontrasena = TextEditingController();
   //TextEditingController controllertipouser = TextEditingController();
-  //Controllerauthf controlf = Get.find();
+  Controllerauthf controlf = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +133,38 @@ class _LoginState extends State<Login> {
       // ignore: sort_child_properties_last
       child: MaterialButton(
         onPressed: () {
+          controlf
+              .ingresarEmail(controllercorreo.text, controllercontrasena.text)
+              .then((value) {
+            if (controlf.emailf != 'Sin registro' &&
+                controlf.tiposuerREAL == 'Empleado') {
+              print(controlf.uid);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => Home(controllercorreo)));
+            } else if (controlf.emailf != 'Sin registro' &&
+                controlf.tiposuerREAL == 'Empleador') {
+              print(controlf.uid);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
+            } else {
+              Get.showSnackbar(const GetSnackBar(
+                title: 'Validación de usuarios',
+                message: 'ERROR! El usuario no existe en la base de datos',
+                icon: Icon(Icons.warning_amber_sharp),
+                duration: Duration(seconds: 4),
+                backgroundColor: Colors.red,
+              ));
+            }
+          }).catchError((onError) {
+            Get.showSnackbar(const GetSnackBar(
+              title: 'Validación de usuarios',
+              message: 'ERROR! El usuario no existe en la base de datos',
+              icon: Icon(Icons.warning_amber_sharp),
+              duration: Duration(seconds: 4),
+              backgroundColor: Colors.red,
+            ));
+          });
+          /*
           if (controllercorreo.text.isNotEmpty &&
               controllercontrasena.text.isNotEmpty) {
             validarDatos();
@@ -150,7 +183,7 @@ class _LoginState extends State<Login> {
                         )
                       ],
                     ));
-          }
+          }*/
         },
         child: const Text('Iniciar sesion',
             style: TextStyle(color: Colors.white, fontSize: 20)),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
+import '../../domain/controller/controladorAuth.dart';
 import '../../domain/models/vacante.dart';
 import 'login.dart';
 
@@ -33,8 +35,13 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   final firebase = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  Controllerauthf controlf = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    print("ESTEE ES: ");
+    print(controlf.tiposuerREAL);
+    print(controlf.uid);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -157,8 +164,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                     if (controlid.text.isNotEmpty &&
                         controlEmpresa.text.isNotEmpty &&
                         controlCargo.text.isNotEmpty &&
-                        controlSalario.text.isNotEmpty &&
-                        controlCiudad.text.isNotEmpty) {
+                        controlSalario.text.isNotEmpty) {
                       // Agregar a la lista los valores de cada texto
 
                       crearvacantes();
@@ -251,7 +257,12 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
 
   crearvacantes() async {
     try {
-      await firebase.collection('Vacantes').doc().set({
+      await firebase
+          .collection('Usuarios')
+          .doc(controlf.uid)
+          .collection('Vacantes')
+          .doc()
+          .set({
         "id": controlid.text,
         "empresa": controlEmpresa.text,
         "cargo": controlCargo.text,

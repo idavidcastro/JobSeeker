@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
+import '../../domain/controller/controladorAuth.dart';
 import '../../domain/models/usuario.dart';
 import 'login.dart';
 
@@ -25,7 +26,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   TextEditingController controlcontrasena = TextEditingController();
   TextEditingController controltipousuario = TextEditingController();
   TextEditingController controlcorreoelectronico = TextEditingController();
-  //Controllerauthf controlff = Get.find();
+  Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
 
   @override
@@ -100,12 +101,70 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   onPressed: () {
                     if (controlcontrasena.text.isNotEmpty &&
                         controlcorreoelectronico.text.isNotEmpty) {
+                      controlf
+                          .registrarEmail(controlcorreoelectronico.text,
+                              controlcontrasena.text, valueChoose.toString())
+                          .then((value) {
+                        if (controlf.emailf != 'Sin registro') {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Nuevo Usuario'),
+                                    content:
+                                        const Text('Usuario nuevo registrado'),
+                                    actions: <Widget>[
+                                      MaterialButton(
+                                        child: const Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                          controlcorreoelectronico.clear();
+                          controlcontrasena.clear();
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'El usuario ya está registrado'),
+                                    actions: <Widget>[
+                                      MaterialButton(
+                                        child: const Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                        }
+                      }).catchError((onError) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text(
+                                      'El usuario ya está registrado'),
+                                  actions: <Widget>[
+                                    MaterialButton(
+                                      child: const Text('Ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                ));
+                      });
+
+                      /*
                       registrarUsuario(
                           valueChoose.toString().trim(),
                           controlcorreoelectronico.text.trim(),
                           controlcontrasena.text.trim());
                       controlcontrasena.clear();
-                      controlcorreoelectronico.clear();
+                      controlcorreoelectronico.clear();*/
                     }
                   },
                   shape: RoundedRectangleBorder(
