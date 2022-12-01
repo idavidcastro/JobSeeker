@@ -4,13 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:jobseeker/UI/pages/postuladosEMP.dart';
 
 class DescripcionEMP extends StatefulWidget {
-  String idVacante;
+  String iduser;
+  String idvacante;
+  String fechacreacion;
   String empresa;
   String cargo;
+  String descripcion;
+  String requisitos;
   String salario;
   String ciudad;
+  String estado;
   DescripcionEMP(
-      this.idVacante, this.empresa, this.cargo, this.salario, this.ciudad,
+      this.iduser,
+      this.idvacante,
+      this.fechacreacion,
+      this.empresa,
+      this.cargo,
+      this.descripcion,
+      this.requisitos,
+      this.salario,
+      this.ciudad,
+      this.estado,
       {Key? key})
       : super(key: key);
 
@@ -34,7 +48,7 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
               style: new TextStyle(fontWeight: FontWeight.bold)),
           Padding(padding: new EdgeInsets.all(5.0)),
           Text(
-            widget.idVacante,
+            widget.idvacante,
             style: new TextStyle(fontSize: 18.0),
           ),
           Padding(padding: new EdgeInsets.all(10.0)),

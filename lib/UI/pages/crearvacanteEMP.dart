@@ -27,11 +27,20 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   ];
   String? valueChoose = 'Valledupar';
 
-  TextEditingController controlid = TextEditingController();
+  List<String> listEstado = [
+    'Activa',
+    'Inactiva',
+  ];
+  String? valueChooseEstado = 'Activa';
+
+  TextEditingController controlidvacante = TextEditingController();
+  TextEditingController controlfechacreacion = TextEditingController();
   TextEditingController controlEmpresa = TextEditingController();
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
-  TextEditingController controlCiudad = TextEditingController();
+  TextEditingController controldescripcion = TextEditingController();
+  TextEditingController controlrequisitos = TextEditingController();
+
   final firebase = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -39,9 +48,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
 
   @override
   Widget build(BuildContext context) {
-    print("ESTEE ES: ");
-    print(controlf.tiposuerREAL);
-    print(controlf.uid);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -52,21 +58,40 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _titulo(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
-                  controller: controlid,
+                  controller: controlidvacante,
                   decoration: InputDecoration(
                       filled: true,
                       //hintText: 'Tipo Usuario',
-                      labelText: 'id',
-                      icon: const Icon(Icons.numbers),
+                      labelText: 'Id Vacante',
+                      icon: const Icon(Icons.date_range),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          controlid.clear();
+                          controlidvacante.clear();
+                        },
+                      )
+                      //probar suffix
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
+                child: TextField(
+                  controller: controlfechacreacion,
+                  decoration: InputDecoration(
+                      filled: true,
+                      //hintText: 'Tipo Usuario',
+                      labelText: 'Fecha de creación',
+                      icon: const Icon(Icons.date_range),
+                      // suffix: Icon(Icons.access_alarm),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controlfechacreacion.clear();
                         },
                       )
                       //probar suffix
@@ -100,7 +125,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                   decoration: InputDecoration(
                       filled: true,
                       labelText: 'Cargo',
-                      icon: const Icon(Icons.person),
+                      icon: const Icon(Icons.business_center),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
@@ -115,11 +140,56 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
+                  controller: controldescripcion,
+                  decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Descripción',
+                      icon: const Icon(Icons.description),
+                      // suffix: Icon(Icons.access_alarm),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controldescripcion.clear();
+                        },
+                      )
+                      //probar suffix
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
+                child: TextFormField(
+                  controller: controlrequisitos,
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(35)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(35)),
+                      prefixIcon: const Icon(
+                        Icons.content_paste,
+                        color: Colors.black,
+                      ),
+                      filled: true,
+                      labelText: 'Requisitos',
+                      labelStyle: TextStyle(color: Colors.black),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controlrequisitos.clear();
+                        },
+                      )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
+                child: TextField(
                   controller: controlSalario,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       filled: true,
-                      labelText: 'Salario',
+                      labelText: 'Salario mensual',
                       icon: const Icon(Icons.attach_money),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
@@ -157,45 +227,44 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
+                child: DropdownButton(
+                  borderRadius: BorderRadius.circular(20.0),
+                  isExpanded: true,
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                  value: valueChooseEstado,
+                  icon: const Icon(Icons.check),
+                  underline: Container(
+                    height: 4,
+                    width: 30,
+                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      valueChooseEstado = value;
+                    });
+                  },
+                  items:
+                      listEstado.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem(value: value, child: Text(value));
+                  }).toList(),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: MaterialButton(
                   elevation: 10.0,
                   onPressed: () {
-                    if (controlid.text.isNotEmpty &&
+                    if (controlidvacante.text.isNotEmpty &&
+                        controlfechacreacion.text.isNotEmpty &&
                         controlEmpresa.text.isNotEmpty &&
                         controlCargo.text.isNotEmpty &&
+                        controldescripcion.text.isNotEmpty &&
+                        controlrequisitos.text.isNotEmpty &&
                         controlSalario.text.isNotEmpty) {
-                      // Agregar a la lista los valores de cada texto
-
                       crearvacantes();
-
-                      // dialogo
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text('Nueva Vacante'),
-                                content:
-                                    const Text('Se ha creado correctamente.'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        _limpiar();
-                                        setState(() {});
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Ok',
-                                        style: TextStyle(color: Colors.black),
-                                      ))
-                                ],
-                              ));
-                      // Devuelvo los datos de la lista _usuarioadd
-                      /*
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ListarUsuario())); //Llamar la Vista
-                      */
+                      limpiar();
                     } else {
                       showDialog(
                           context: context,
@@ -205,7 +274,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                                 actions: [
                                   TextButton(
                                       onPressed: () {
-                                        _limpiar();
                                         setState(() {});
                                         Navigator.pop(context);
                                       },
@@ -235,14 +303,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         ));
   }
 
-  _limpiar() {
-    controlid.text = '';
-    controlEmpresa.text = '';
-    controlCargo.text = '';
-    controlSalario.text = '';
-    controlCiudad.text = '';
-  }
-
   Widget _titulo() {
     return const Padding(
       padding: EdgeInsets.all(30.0),
@@ -255,20 +315,52 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
     );
   }
 
+  limpiar() {
+    controlidvacante.clear();
+    controlfechacreacion.clear();
+    controlEmpresa.clear();
+    controlCargo.clear();
+    controldescripcion.clear();
+    controlrequisitos.clear();
+    controlSalario.clear();
+  }
+
   crearvacantes() async {
     try {
       await firebase
           .collection('Usuarios')
           .doc(controlf.uid)
           .collection('Vacantes')
-          .doc()
+          .doc(controlidvacante.text)
           .set({
-        "id": controlid.text,
+        "iduser": controlf.uid,
+        "idvacante": controlidvacante.text,
+        "fechacreacion": controlfechacreacion.text,
         "empresa": controlEmpresa.text,
         "cargo": controlCargo.text,
+        "descripcion": controldescripcion.text,
+        "requisitos": controlrequisitos.text,
         "salario": controlSalario.text,
-        "ciudad": controlCiudad.text,
+        "ciudad": valueChoose,
+        "estado": valueChooseEstado,
       });
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: const Text('Nueva Vacante'),
+                content: const Text('Se ha creado correctamente.'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        setState(() {});
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(color: Colors.black),
+                      ))
+                ],
+              ));
     } catch (e) {
       if (kDebugMode) {
         print('Error...' + e.toString());

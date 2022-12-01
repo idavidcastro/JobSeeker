@@ -138,21 +138,31 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => DescripcionEMP(
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .idVacante,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .empresa,
-                                          controladorvacante
-                                              .getVacantesGral![posicion].cargo,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .salario,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .ciudad,
-                                        )));
+                                        controladorvacante
+                                            .getVacantesGral![posicion].iduser,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .idvacante,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .fechacreacion,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].empresa,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].cargo,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .descripcion,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .requisitos,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].salario,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].ciudad,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .estado)));
                           }),
                     );
                   })

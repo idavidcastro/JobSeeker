@@ -10,6 +10,17 @@ class ConsultasController extends GetxController {
     _vacanteFirestore.value = await PeticionesVacanates.consultarGralEMP();
   }
 
+  Future<void> consultaVacantes() async {
+    _vacanteFirestore.value = await PeticionesVacanates.consultarGral();
+  }
+
+  Future<void> consultaVacantesPostulaciones() async {
+    _vacanteFirestore.value =
+        await PeticionesVacanates.consultarGralPostulaciones();
+  }
+
+  //-----------------------------------------
+
   Future<void> consultaVacantesFiltro(String cargo) async {
     _vacanteFirestore.value =
         await PeticionesVacanates.consultarGralFiltro(cargo);

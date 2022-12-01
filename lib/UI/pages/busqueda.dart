@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../domain/controller/controladorAuth.dart';
 import '../../domain/controller/controllerfirebase.dart';
 import '../../domain/models/vacante.dart';
 import 'app.dart';
@@ -28,32 +29,36 @@ class _PageBusquedaState extends State<PageBusqueda> {
   @override
   Widget build(BuildContext context) {
     //TextEditingController cargo = TextEditingController();
-
-    //ConsultasController controladorvacante = Get.find();
-    //controladorvacante.consultaVacantesFiltro('Gerente').then((value) => null);
+    Controllerauthf controlf = Get.find();
+    print("El id nueeuueue");
+    print(controlf.uid);
+    ConsultasController controladorvacante = Get.find();
+    controladorvacante.consultaVacantes().then((value) => null);
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Card(
-              child: TextField(
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-                onChanged: (val) {
-                  setState(() {
-                    cargo = val;
-                  });
-                },
-              ),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Card(
+            child: TextField(
+              decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+              onChanged: (val) {
+                setState(() {
+                  cargo = val;
+                });
+              },
             ),
-            backgroundColor: Colors.black,
           ),
-          floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.black,
-              child: const Icon(Icons.delete),
-              onPressed: () {}),
-          body: StreamBuilder<QuerySnapshot>(
+          backgroundColor: Colors.black,
+        ),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: const Icon(Icons.delete),
+            onPressed: () {}),
+        body:
+            /*
+          StreamBuilder<QuerySnapshot>(
             stream: (cargo != "" && cargo != null)
                 ? FirebaseFirestore.instance
                     .collection('Vacantes')
@@ -140,9 +145,9 @@ class _PageBusquedaState extends State<PageBusqueda> {
                         );
                       });
             },
-          )
-          /*
-        Obx(
+          )*/
+
+            Obx(
           () => controladorvacante.getVacantesGral?.isEmpty == false
               ? ListView.builder(
                   itemCount: controladorvacante.getVacantesGral?.isEmpty == true
@@ -215,28 +220,37 @@ class _PageBusquedaState extends State<PageBusqueda> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => Descripcion(
-                                          widget.correo,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .idVacante,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .empresa,
-                                          controladorvacante
-                                              .getVacantesGral![posicion].cargo,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .salario,
-                                          controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .ciudad,
-                                        )));
+                                        controladorvacante
+                                            .getVacantesGral![posicion].iduser,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .idvacante,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .fechacreacion,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].empresa,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].cargo,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .descripcion,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .requisitos,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].salario,
+                                        controladorvacante
+                                            .getVacantesGral![posicion].ciudad,
+                                        controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .estado)));
                           }),
                     );
                   })
               : const Icon(Icons.abc),
-        ),*/
-          ),
+        ),
+      ),
     );
   }
 }

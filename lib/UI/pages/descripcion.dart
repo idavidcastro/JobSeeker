@@ -1,15 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../domain/controller/controladorAuth.dart';
 
 class Descripcion extends StatefulWidget {
-  final TextEditingController correo;
-  String idVacante;
+  String iduser;
+  String idvacante;
+  String fechacreacion;
   String empresa;
   String cargo;
+  String descripcion;
+  String requisitos;
   String salario;
   String ciudad;
-  Descripcion(this.correo, this.idVacante, this.empresa, this.cargo,
-      this.salario, this.ciudad,
+  String estado;
+  Descripcion(
+      this.iduser,
+      this.idvacante,
+      this.fechacreacion,
+      this.empresa,
+      this.cargo,
+      this.descripcion,
+      this.requisitos,
+      this.salario,
+      this.ciudad,
+      this.estado,
       {Key? key})
       : super(key: key);
   @override
@@ -17,6 +34,7 @@ class Descripcion extends StatefulWidget {
 }
 
 class _DescripcionState extends State<Descripcion> {
+  Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
@@ -33,7 +51,7 @@ class _DescripcionState extends State<Descripcion> {
               style: new TextStyle(fontWeight: FontWeight.bold)),
           Padding(padding: new EdgeInsets.all(5.0)),
           Text(
-            widget.idVacante,
+            widget.idvacante,
             style: new TextStyle(fontSize: 18.0),
           ),
           Padding(padding: new EdgeInsets.all(10.0)),
@@ -72,43 +90,63 @@ class _DescripcionState extends State<Descripcion> {
           elevation: 50.0,
           color: Colors.black,
           onPressed: () {
-            crearPostulado();
+            crearPostulacion();
           });
     });
   }
 
-  crearPostulado() async {
+  crearPostulacion() async {
     try {
-      CollectionReference ref = FirebaseFirestore.instance.collection('Users');
-      QuerySnapshot usuario = await ref.get();
+      await firebase
+          .collection('Usuarios')
+          .doc(controlf.uid)
+          .collection('Postulaciones')
+          .doc()
+          .set({
+        "idPostulación": controlf.uid,
+        "idusercreador": widget.iduser,
+        "idvacante": widget.idvacante,
+        "fechacreacion": widget.fechacreacion,
+        "empresa": widget.empresa,
+        "cargo": widget.cargo,
+        "descripcion": widget.descripcion,
+        "requisitos": widget.requisitos,
+        "salario": widget.salario,
+        "ciudad": widget.ciudad,
+        "estado": widget.estado,
+      });
+      //crear postulado en user creador
+      await firebase
+          .collection('Usuarios')
+          .doc(widget.iduser)
+          .collection('Vacantes')
+          .doc(widget.idvacante)
+          .collection('Postulados')
+          .doc()
+          .set({
+        "idPostulación": controlf.uid,
+        "idusercreador": widget.iduser,
+        "correo": controlf.emailf
+      });
 
-      if (usuario.docs.length != 0) {
-        for (var cursor in usuario.docs) {
-          if (cursor.get('correo') == widget.correo.text) {
-            String ideuser = cursor.get('id');
-            try {
-              String id =
-                  FirebaseFirestore.instance.collection('Users').doc().id;
-              print(id);
-              await firebase.collection(ideuser).doc(id).set({});
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: const Text('Nuevo Usuario'),
-                        content: const Text('Usuario nuevo registrado'),
-                        actions: <Widget>[
-                          MaterialButton(
-                            child: const Text('Ok'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      ));
-            } catch (e) {}
-          }
-        }
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: const Text('Se ha postulado a la vacante'),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: const Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error...' + e.toString());
       }
-    } catch (e) {}
+    }
   }
 }

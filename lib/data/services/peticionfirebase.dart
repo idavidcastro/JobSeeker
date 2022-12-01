@@ -69,6 +69,35 @@ class PeticionesVacanates {
     return lista;
   }
 
+  static Future<List<Vacante>> consultarGralPostulaciones() async {
+    List<Vacante> lista = [];
+    await _db
+        .collection("Usuarios")
+        .doc(controlf.uid)
+        .collection('Postulaciones')
+        .get()
+        .then((respuesta) {
+      for (var doc in respuesta.docs) {
+        log(doc.data().toString());
+        lista.add(Vacante.desdeDoc(doc.data()));
+      }
+    });
+
+    return lista;
+  }
+
+  static Future<List<Vacante>> consultarGral() async {
+    List<Vacante> lista = [];
+    await _db.collectionGroup("Vacantes").get().then((respuesta) {
+      for (var doc in respuesta.docs) {
+        log(doc.data().toString());
+        lista.add(Vacante.desdeDoc(doc.data()));
+      }
+    });
+
+    return lista;
+  }
+
   static Future<List<Vacante>> consultarGralFiltro(String cargo) async {
     List<Vacante> lista = [];
     await _db
