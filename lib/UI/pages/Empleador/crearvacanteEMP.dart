@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import '../../domain/controller/controladorAuth.dart';
-import '../../domain/models/vacante.dart';
-import 'login.dart';
+import '../../../domain/controller/controladorAuth.dart';
+import '../../../domain/models/vacante.dart';
+import '../login.dart';
 
 class AdicionarVacantes extends StatefulWidget {
   final TextEditingController correo;
@@ -301,18 +301,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
             ],
           ),
         ));
-  }
-
-  Widget _titulo() {
-    return const Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Text(
-        "Nueva Vacante",
-        style: TextStyle(
-            color: Colors.black, fontSize: 40.0, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-    );
   }
 
   limpiar() {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/app.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
+import 'package:jobseeker/domain/controller/controllerfirebasePostulados.dart';
 
 import 'domain/controller/controladorAuth.dart';
 
@@ -20,5 +21,6 @@ void main() async {
       : await Firebase.initializeApp();
   Get.put(Controllerauthf());
   Get.put(ConsultasController());
+  Get.put(ConsultasControllerPostulados());
   runApp(const App());
 }

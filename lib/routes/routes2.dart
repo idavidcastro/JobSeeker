@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../UI/pages/configEMP.dart';
-import '../UI/pages/crearVacanteEMP.dart';
-import '../UI/pages/vacantesEMP.dart';
+
+import '../UI/pages/Empleador/configEMP.dart';
+import '../UI/pages/Empleador/crearvacanteEMP.dart';
+import '../UI/pages/Empleador/vacantesEMP.dart';
 
 class Routes2 extends StatelessWidget {
   final TextEditingController correo;

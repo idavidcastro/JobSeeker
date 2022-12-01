@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../UI/pages/busqueda.dart';
-import '../UI/pages/config.dart';
-import '../UI/pages/vacantes.dart';
+import '../UI/pages/Empleado/busqueda.dart';
+import '../UI/pages/Empleado/config.dart';
+import '../UI/pages/Empleado/vacantes.dart';
 
 class Routes extends StatelessWidget {
   final TextEditingController correo;

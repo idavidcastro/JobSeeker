@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:jobseeker/domain/models/vacante.dart';
 
 import '../../domain/controller/controladorAuth.dart';
+import '../../domain/models/postulado.dart';
 
-class PeticionesVacanates {
+class PeticionesPostulados {
   //static final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static Controllerauthf controlf = Get.find();
@@ -52,25 +52,9 @@ class PeticionesVacanates {
     //return true;
   }
   */
-  static Future<List<Vacante>> consultarGralEMP() async {
-    List<Vacante> lista = [];
-    await _db
-        .collection("Usuarios")
-        .doc(controlf.uid)
-        .collection('Vacantes')
-        .get()
-        .then((respuesta) {
-      for (var doc in respuesta.docs) {
-        log(doc.data().toString());
-        lista.add(Vacante.desdeDoc(doc.data()));
-      }
-    });
 
-    return lista;
-  }
-
-  static Future<List<Vacante>> consultarPostulados(String idvacante) async {
-    List<Vacante> lista = [];
+  static Future<List<Postulado>> consultarPostulados(String idvacante) async {
+    List<Postulado> lista = [];
     await _db
         .collection("Usuarios")
         .doc(controlf.uid)
@@ -81,55 +65,9 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data().toString());
-        lista.add(Vacante.desdeDoc(doc.data()));
+        lista.add(Postulado.desdeDoc(doc.data()));
       }
     });
-
-    return lista;
-  }
-
-  static Future<List<Vacante>> consultarGralPostulaciones() async {
-    List<Vacante> lista = [];
-    await _db
-        .collection("Usuarios")
-        .doc(controlf.uid)
-        .collection('Postulaciones')
-        .get()
-        .then((respuesta) {
-      for (var doc in respuesta.docs) {
-        log(doc.data().toString());
-        lista.add(Vacante.desdeDoc(doc.data()));
-      }
-    });
-
-    return lista;
-  }
-
-  static Future<List<Vacante>> consultarGral() async {
-    List<Vacante> lista = [];
-    await _db.collectionGroup("Vacantes").get().then((respuesta) {
-      for (var doc in respuesta.docs) {
-        log(doc.data().toString());
-        lista.add(Vacante.desdeDoc(doc.data()));
-      }
-    });
-
-    return lista;
-  }
-
-  static Future<List<Vacante>> consultarGralFiltro(String cargo) async {
-    List<Vacante> lista = [];
-    await _db
-        .collection("Vacantes")
-        .where("cargo" == cargo)
-        .get()
-        .then((respuesta) {
-      for (var doc in respuesta.docs) {
-        log(doc.data().toString());
-        lista.add(Vacante.desdeDoc(doc.data()));
-      }
-    });
-    //print(lista);
 
     return lista;
   }

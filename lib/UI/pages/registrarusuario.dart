@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 
 import '../../domain/controller/controladorAuth.dart';
@@ -20,9 +21,20 @@ class AdicionarUsuario extends StatefulWidget {
 
 class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   List<String> list = ['Empleado', 'Empleador'];
+  List<String> listCiudades = [
+    'Valledupar',
+    'Santa Marta',
+    'Barranquilla',
+    'Bogotá',
+    'Medellín',
+    'Cali'
+  ];
   String? valueChoose = 'Empleado';
+  String? valueChooseCiudades = 'Valledupar';
 
-  final List<Usuario> _usuarioadd = [];
+  TextEditingController controlnombres = TextEditingController();
+  TextEditingController controlapellidos = TextEditingController();
+  TextEditingController controltelefono = TextEditingController();
   TextEditingController controlcontrasena = TextEditingController();
   TextEditingController controltipousuario = TextEditingController();
   TextEditingController controlcorreoelectronico = TextEditingController();
@@ -40,9 +52,29 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _titulo(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 40, 50, 0),
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.blue,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(48),
+                      ),
+                      width: 100,
+                      height: 100,
+                      child: const Icon(
+                        Icons.camera_alt_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
                 child: DropdownButton(
                   value: valueChoose,
                   onChanged: (String? value) {
@@ -53,6 +85,25 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   items: list.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem(value: value, child: Text(value));
                   }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                child: TextFormField(
+                  controller: controlnombres,
+                  decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Nombre completo de usuario o compañía',
+                      icon: const Icon(Icons.message),
+                      // suffix: Icon(Icons.access_alarm),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controlnombres.clear();
+                        },
+                      )
+                      //probar suffix
+                      ),
                 ),
               ),
               Padding(
@@ -95,17 +146,56 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: controltelefono,
+                  decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Teléfono',
+                      icon: const Icon(Icons.lock),
+                      // suffix: Icon(Icons.access_alarm),
+                      suffix: GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          controltelefono.clear();
+                        },
+                      )
+                      //probar suffix
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                child: DropdownButton(
+                  value: valueChooseCiudades,
+                  onChanged: (String? value) {
+                    setState(() {
+                      valueChooseCiudades = value;
+                    });
+                  },
+                  items: listCiudades
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem(value: value, child: Text(value));
+                  }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 15, 50, 20),
                 child: MaterialButton(
                   elevation: 10.0,
                   onPressed: () {
                     if (controlcontrasena.text.isNotEmpty &&
+                        controlnombres.text.isNotEmpty &&
+                        controlapellidos.text.isNotEmpty &&
+                        controltelefono.text.isNotEmpty &&
                         controlcorreoelectronico.text.isNotEmpty) {
                       controlf
                           .registrarEmail(controlcorreoelectronico.text,
                               controlcontrasena.text, valueChoose.toString())
                           .then((value) {
                         if (controlf.emailf != 'Sin registro') {
+                          registrarUserProfile(controlf.uid);
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -121,15 +211,14 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                                       )
                                     ],
                                   ));
-                          controlcorreoelectronico.clear();
-                          controlcontrasena.clear();
+                          limpiar();
                         } else {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
                                     title: const Text('Error'),
                                     content: const Text(
-                                        'El usuario ya está registrado'),
+                                        'El usuario ya está registrado con este correo'),
                                     actions: <Widget>[
                                       MaterialButton(
                                         child: const Text('Ok'),
@@ -146,7 +235,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                             builder: (context) => AlertDialog(
                                   title: const Text('Error'),
                                   content: const Text(
-                                      'El usuario ya está registrado'),
+                                      'El usuario ya está registrado con este correo'),
                                   actions: <Widget>[
                                     MaterialButton(
                                       child: const Text('Ok'),
@@ -157,14 +246,6 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                                   ],
                                 ));
                       });
-
-                      /*
-                      registrarUsuario(
-                          valueChoose.toString().trim(),
-                          controlcorreoelectronico.text.trim(),
-                          controlcontrasena.text.trim());
-                      controlcontrasena.clear();
-                      controlcorreoelectronico.clear();*/
                     }
                   },
                   shape: RoundedRectangleBorder(
@@ -185,24 +266,26 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
         ));
   }
 
-  Widget _contrasena() {
-    var controlcontrasena;
-    return TextField(
-      onChanged: controlcontrasena,
-      controller: controlcontrasena,
-    );
+  limpiar() {
+    controlcorreoelectronico.clear();
+    controlcontrasena.clear();
+    controlapellidos.clear();
+    controlnombres.clear();
+    controltelefono.clear();
   }
 
-  Widget _titulo() {
-    return const Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Text(
-        "Registrarse",
-        style: TextStyle(
-            color: Colors.black, fontSize: 50.0, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-    );
+  registrarUserProfile(String uid) async {
+    await firebase.collection('Usuarios').doc(uid).set({
+      "foto": '',
+      "nombres": controlnombres.text,
+      "tipousuario": valueChoose,
+      "correo": controlcorreoelectronico.text,
+      "contraseña": controlcontrasena.text,
+      "telefono": controltelefono.text,
+      "ciudad": valueChooseCiudades,
+      "cv": '',
+      "userid": uid
+    });
   }
 
   registrarUsuario(String tipousuario, String correo, String passwd) async {

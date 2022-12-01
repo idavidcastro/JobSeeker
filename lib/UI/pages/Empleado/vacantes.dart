@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../domain/controller/controllerfirebase.dart';
-import '../../domain/models/vacante.dart';
+import '../../../domain/controller/controllerfirebase.dart';
+import '../../../domain/models/vacante.dart';
 import 'descripcion.dart';
-import 'descripcionEMP.dart';
+import '../Empleador/descripcionEMP.dart';
 
 class Bienvenida extends StatefulWidget {
   final TextEditingController correo;

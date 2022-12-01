@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:jobseeker/UI/pages/Empleador/postuladosEMP.dart';
 
-import '../../domain/controller/controladorAuth.dart';
-
-class Descripcion extends StatefulWidget {
+class DescripcionEMP extends StatefulWidget {
   String iduser;
   String idvacante;
   String fechacreacion;
@@ -16,7 +14,7 @@ class Descripcion extends StatefulWidget {
   String salario;
   String ciudad;
   String estado;
-  Descripcion(
+  DescripcionEMP(
       this.iduser,
       this.idvacante,
       this.fechacreacion,
@@ -29,13 +27,12 @@ class Descripcion extends StatefulWidget {
       this.estado,
       {Key? key})
       : super(key: key);
+
   @override
-  State<Descripcion> createState() => _DescripcionState();
+  State<DescripcionEMP> createState() => _DescripcionEMPState();
 }
 
-class _DescripcionState extends State<Descripcion> {
-  Controllerauthf controlf = Get.find();
-  final firebase = FirebaseFirestore.instance;
+class _DescripcionEMPState extends State<DescripcionEMP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,13 +64,13 @@ class _DescripcionState extends State<Descripcion> {
           Text('CIUDAD ', style: new TextStyle(fontWeight: FontWeight.bold)),
           Text(widget.ciudad, style: new TextStyle(fontSize: 18.0)),
           Padding(padding: new EdgeInsets.all(25.0)),
-          _bottonPostularse()
+          _bottonPostulados()
         ]),
       ),
     );
   }
 
-  Widget _bottonPostularse() {
+  Widget _bottonPostulados() {
     // ignore: prefer_const_constructors
     return StreamBuilder(
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -81,7 +78,7 @@ class _DescripcionState extends State<Descripcion> {
           child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
-            child: const Text('Postularse',
+            child: const Text('Ver Postulados',
                 style: TextStyle(color: Colors.white, fontSize: 14)),
           ),
           shape: RoundedRectangleBorder(
@@ -90,63 +87,11 @@ class _DescripcionState extends State<Descripcion> {
           elevation: 50.0,
           color: Colors.black,
           onPressed: () {
-            crearPostulacion();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => PostuladosEMP(widget.idvacante)));
           });
     });
-  }
-
-  crearPostulacion() async {
-    try {
-      await firebase
-          .collection('Usuarios')
-          .doc(controlf.uid)
-          .collection('Postulaciones')
-          .doc()
-          .set({
-        "idPostulación": controlf.uid,
-        "idusercreador": widget.iduser,
-        "idvacante": widget.idvacante,
-        "fechacreacion": widget.fechacreacion,
-        "empresa": widget.empresa,
-        "cargo": widget.cargo,
-        "descripcion": widget.descripcion,
-        "requisitos": widget.requisitos,
-        "salario": widget.salario,
-        "ciudad": widget.ciudad,
-        "estado": widget.estado,
-      });
-      //crear postulado en user creador
-      await firebase
-          .collection('Usuarios')
-          .doc(widget.iduser)
-          .collection('Vacantes')
-          .doc(widget.idvacante)
-          .collection('Postulados')
-          .doc()
-          .set({
-        "idPostulación": controlf.uid,
-        "idusercreador": widget.iduser,
-        "correo": controlf.emailf
-      });
-
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: const Text('Se ha postulado a la vacante'),
-                actions: <Widget>[
-                  MaterialButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error...' + e.toString());
-      }
-    }
   }
 }

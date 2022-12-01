@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jobseeker/UI/pages/descripcionEMP.dart';
+import 'package:jobseeker/UI/pages/Empleador/descripcionEMP.dart';
 import 'package:jobseeker/UI/pages/login.dart';
 
-import '../../domain/controller/controllerfirebase.dart';
-import '../../domain/models/vacante.dart';
-import 'descripcion.dart';
+import '../../../domain/controller/controllerfirebase.dart';
+import '../../../domain/models/vacante.dart';
+import '../Empleado/descripcion.dart';
 
 class ListaPrincipalEmpreador extends StatefulWidget {
   const ListaPrincipalEmpreador({Key? key}) : super(key: key);

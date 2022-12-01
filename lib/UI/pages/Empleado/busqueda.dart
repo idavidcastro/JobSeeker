@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/controller/controladorAuth.dart';
-import '../../domain/controller/controllerfirebase.dart';
-import '../../domain/models/vacante.dart';
-import 'app.dart';
+import '../../../domain/controller/controladorAuth.dart';
+import '../../../domain/controller/controllerfirebase.dart';
+import '../../../domain/models/vacante.dart';
+import '../app.dart';
 import 'descripcion.dart';
-import 'descripcionEMP.dart';
+import '../Empleador/descripcionEMP.dart';
 
 class PageBusqueda extends StatefulWidget {
   final TextEditingController correo;

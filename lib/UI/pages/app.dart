@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import '../../routes/routes.dart';
 import '../../routes/routes2.dart';
 import 'login.dart';
-import 'principal.dart';
-import 'principalEMP.dart';
+import 'Empleado/principal.dart';
+import 'Empleador/principalEMP.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
