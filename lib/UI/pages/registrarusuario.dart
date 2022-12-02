@@ -94,7 +94,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   decoration: InputDecoration(
                       filled: true,
                       labelText: 'Nombre completo de usuario o compañía',
-                      icon: const Icon(Icons.message),
+                      icon: const Icon(Icons.person_add_alt_1_outlined),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
@@ -153,7 +153,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   decoration: InputDecoration(
                       filled: true,
                       labelText: 'Teléfono',
-                      icon: const Icon(Icons.lock),
+                      icon: const Icon(Icons.phone),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
@@ -187,7 +187,6 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                   onPressed: () {
                     if (controlcontrasena.text.isNotEmpty &&
                         controlnombres.text.isNotEmpty &&
-                        controlapellidos.text.isNotEmpty &&
                         controltelefono.text.isNotEmpty &&
                         controlcorreoelectronico.text.isNotEmpty) {
                       controlf
@@ -275,17 +274,21 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   }
 
   registrarUserProfile(String uid) async {
-    await firebase.collection('Usuarios').doc(uid).set({
-      "foto": '',
-      "nombres": controlnombres.text,
-      "tipousuario": valueChoose,
-      "correo": controlcorreoelectronico.text,
-      "contraseña": controlcontrasena.text,
-      "telefono": controltelefono.text,
-      "ciudad": valueChooseCiudades,
-      "cv": '',
-      "userid": uid
-    });
+    try {
+      await firebase.collection('Usuarios').doc(uid).set({
+        "foto": '',
+        "nombres": controlnombres.text,
+        "tipousuario": valueChoose,
+        "correo": controlcorreoelectronico.text,
+        "contraseña": controlcontrasena.text,
+        "telefono": controltelefono.text,
+        "ciudad": valueChooseCiudades,
+        "cv": '',
+        "userid": uid
+      });
+    } catch (e) {
+      print('Error...' + e.toString());
+    }
   }
 
   registrarUsuario(String tipousuario, String correo, String passwd) async {

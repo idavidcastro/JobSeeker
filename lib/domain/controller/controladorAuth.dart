@@ -7,6 +7,7 @@ class Controllerauthf extends GetxController {
   final Rx<dynamic> _uid = "".obs;
   final Rx<dynamic> _usuarior = "Sin registro".obs;
   final Rx<dynamic> _tiposuer = "".obs;
+  final Rx<dynamic> _nombre = "".obs;
 
   String get emailf => _usuarior.value;
   String get uid => _uid.value;

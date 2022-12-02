@@ -1,25 +1,49 @@
 class Usuario {
-  var tipo_usuario;
-  var usuario;
-  var contrasena;
-  var correo_electronico;
+  final String foto;
+  final String nombres;
+  final String tipousuario;
+  final String correo;
+  final String contrasena;
+  final String telefono;
+  final String ciudad;
+  final String cv;
+  final String userid;
 
-  Usuario(
-      {this.usuario,
-      this.contrasena,
-      this.tipo_usuario,
-      this.correo_electronico});
+  Usuario({
+    required this.foto,
+    required this.nombres,
+    required this.tipousuario,
+    required this.correo,
+    required this.contrasena,
+    required this.telefono,
+    required this.ciudad,
+    required this.cv,
+    required this.userid,
+  });
+
+  factory Usuario.desdeDoc(Map<String, dynamic> data) {
+    return Usuario(
+      foto: data['foto'] ?? '',
+      nombres: data['nombres'] ?? '',
+      tipousuario: data['tipousuario'] ?? '',
+      correo: data['correo'] ?? '',
+      contrasena: data['contraseña'] ?? '',
+      telefono: data['telefono'] ?? '',
+      ciudad: data['ciudad'] ?? '',
+      cv: data['cv'] ?? '',
+      userid: data['userid'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "foto": foto,
+        "nombres": nombres,
+        "tipousuario": tipousuario,
+        "correo": correo,
+        "contraseña": contrasena,
+        "telefono": telefono,
+        "ciudad": ciudad,
+        "cv": cv,
+        "userid": userid,
+      };
 }
-
-List<Usuario> listaUsuarios = [
-  Usuario(
-      tipo_usuario: 'Empleado',
-      usuario: 'ivan',
-      contrasena: '1',
-      correo_electronico: 'afelipe@gmail.com'),
-  Usuario(
-      tipo_usuario: 'Empleador',
-      usuario: 'ivan',
-      contrasena: '2',
-      correo_electronico: 'andres21@gmail.com'),
-];

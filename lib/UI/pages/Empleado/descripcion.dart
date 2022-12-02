@@ -97,6 +97,7 @@ class _DescripcionState extends State<Descripcion> {
 
   crearPostulacion() async {
     try {
+      //crear postulacion para empleado
       await firebase
           .collection('Usuarios')
           .doc(controlf.uid)
@@ -115,7 +116,10 @@ class _DescripcionState extends State<Descripcion> {
         "ciudad": widget.ciudad,
         "estado": widget.estado,
       });
-      //crear postulado en user creador
+      //crear postuladPo en user creador (EMLEADOR)
+      //necesito consultar el usuario para pasarlo, el id del usuario esta en controlf.uid,
+      // es decir el usuario que esta actualmente en login
+
       await firebase
           .collection('Usuarios')
           .doc(widget.iduser)
@@ -124,7 +128,7 @@ class _DescripcionState extends State<Descripcion> {
           .collection('Postulados')
           .doc()
           .set({
-        "idPostulación": controlf.uid,
+        "idPostulado": controlf.uid,
         "idusercreador": widget.iduser,
         "correo": controlf.emailf
       });

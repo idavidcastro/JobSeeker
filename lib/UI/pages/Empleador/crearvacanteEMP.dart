@@ -35,11 +35,11 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
 
   TextEditingController controlidvacante = TextEditingController();
   TextEditingController controlfechacreacion = TextEditingController();
-  TextEditingController controlEmpresa = TextEditingController();
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
   TextEditingController controldescripcion = TextEditingController();
   TextEditingController controlrequisitos = TextEditingController();
+  TextEditingController controlempresa = TextEditingController();
 
   final firebase = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -101,17 +101,16 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
-                  controller: controlEmpresa,
+                  controller: controlempresa,
                   decoration: InputDecoration(
                       filled: true,
-                      //hintText: 'Tipo Usuario',
                       labelText: 'Empresa',
-                      icon: const Icon(Icons.business),
+                      icon: const Icon(Icons.description),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          controlEmpresa.clear();
+                          controlempresa.clear();
                         },
                       )
                       //probar suffix
@@ -257,12 +256,15 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                   elevation: 10.0,
                   onPressed: () {
                     if (controlidvacante.text.isNotEmpty &&
+                        controlempresa.text.isNotEmpty &&
                         controlfechacreacion.text.isNotEmpty &&
-                        controlEmpresa.text.isNotEmpty &&
                         controlCargo.text.isNotEmpty &&
                         controldescripcion.text.isNotEmpty &&
                         controlrequisitos.text.isNotEmpty &&
                         controlSalario.text.isNotEmpty) {
+                      //var nombre = getName();
+                      //print(nombre);
+
                       crearvacantes();
                       limpiar();
                     } else {
@@ -306,11 +308,11 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   limpiar() {
     controlidvacante.clear();
     controlfechacreacion.clear();
-    controlEmpresa.clear();
     controlCargo.clear();
     controldescripcion.clear();
     controlrequisitos.clear();
     controlSalario.clear();
+    controlempresa.clear();
   }
 
   crearvacantes() async {
@@ -324,7 +326,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         "iduser": controlf.uid,
         "idvacante": controlidvacante.text,
         "fechacreacion": controlfechacreacion.text,
-        "empresa": controlEmpresa.text,
+        "empresa": controlempresa.text,
         "cargo": controlCargo.text,
         "descripcion": controldescripcion.text,
         "requisitos": controlrequisitos.text,

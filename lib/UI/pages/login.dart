@@ -19,7 +19,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final List<Usuario> _usuarios = listaUsuarios;
   TextEditingController controllercorreo = TextEditingController();
   TextEditingController controllercontrasena = TextEditingController();
   //TextEditingController controllertipouser = TextEditingController();
