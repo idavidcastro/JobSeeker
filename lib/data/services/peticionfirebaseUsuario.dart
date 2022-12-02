@@ -57,7 +57,7 @@ class PeticionesUsuarios {
     List<Usuario> lista = [];
     await _db
         .collection("Usuarios")
-        .where("userid" == idusuario)
+        .where('userid', isEqualTo: idusuario)
         .get()
         .then((respuesta) {
       for (var doc in respuesta.docs) {

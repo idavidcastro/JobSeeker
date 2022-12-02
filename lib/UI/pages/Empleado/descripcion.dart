@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/domain/controller/controllerfirebaseUsuario.dart';
 
 import '../../../domain/controller/controladorAuth.dart';
 
@@ -38,42 +39,77 @@ class _DescripcionState extends State<Descripcion> {
   final firebase = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
+    ConsultasControllerUsuarios controladorusuario = Get.find();
+    controladorusuario.consultaPostulados(controlf.uid).then((value) => null);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('DESCRIPCIÓN DE VACANTE'),
         backgroundColor: Colors.black,
       ),
-      body: new Center(
-        child: new Column(children: [
-          Padding(padding: new EdgeInsets.all(20.0)),
-          Text('ID VACANTE ',
-              style: new TextStyle(fontWeight: FontWeight.bold)),
-          Padding(padding: new EdgeInsets.all(5.0)),
-          Text(
-            widget.idvacante,
-            style: new TextStyle(fontSize: 18.0),
-          ),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('EMPRESA ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.empresa, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text(' CARGO ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.cargo, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('SALARIO ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.salario, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('CIUDAD ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.ciudad, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(25.0)),
-          _bottonPostularse()
-        ]),
+      body: Obx(
+        () => controladorusuario.getUsuarios?.isEmpty == false
+            ? ListView.builder(
+                itemCount: controladorusuario.getUsuarios?.isEmpty == true
+                    ? 0
+                    : controladorusuario.getUsuarios!.length,
+                itemBuilder: (context, posicion) {
+                  return Column(children: [
+                    const Padding(padding: EdgeInsets.all(20.0)),
+                    const Text('ID VACANTE ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Padding(padding: EdgeInsets.all(5.0)),
+                    Text(
+                      widget.idvacante,
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    const Padding(padding: EdgeInsets.all(10.0)),
+                    const Text('EMPRESA ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.empresa,
+                        style: const TextStyle(fontSize: 18.0)),
+                    const Padding(padding: EdgeInsets.all(10.0)),
+                    const Text(' CARGO ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
+                    const Padding(padding: EdgeInsets.all(10.0)),
+                    const Text('SALARIO ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.salario,
+                        style: const TextStyle(fontSize: 18.0)),
+                    const Padding(padding: EdgeInsets.all(10.0)),
+                    const Text('CIUDAD ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.ciudad, style: TextStyle(fontSize: 18.0)),
+                    const Padding(padding: EdgeInsets.all(25.0)),
+                    _bottonPostularse(
+                      controladorusuario.getUsuarios![posicion].foto,
+                      controladorusuario.getUsuarios![posicion].nombres,
+                      controladorusuario.getUsuarios![posicion].tipousuario,
+                      controladorusuario.getUsuarios![posicion].correo,
+                      controladorusuario.getUsuarios![posicion].contrasena,
+                      controladorusuario.getUsuarios![posicion].telefono,
+                      controladorusuario.getUsuarios![posicion].ciudad,
+                      controladorusuario.getUsuarios![posicion].cv,
+                      controladorusuario.getUsuarios![posicion].userid,
+                    )
+                  ]);
+                })
+            : const Icon(Icons.abc),
       ),
     );
   }
 
-  Widget _bottonPostularse() {
+  Widget _bottonPostularse(
+      String foto,
+      String nombres,
+      String tipousuario,
+      String correo,
+      String contrasena,
+      String telefono,
+      String ciudad,
+      String cv,
+      String userid) {
     // ignore: prefer_const_constructors
     return StreamBuilder(
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -90,12 +126,22 @@ class _DescripcionState extends State<Descripcion> {
           elevation: 50.0,
           color: Colors.black,
           onPressed: () {
-            crearPostulacion();
+            crearPostulacion(foto, nombres, tipousuario, correo, contrasena,
+                telefono, ciudad, cv, userid);
           });
     });
   }
 
-  crearPostulacion() async {
+  crearPostulacion(
+      String foto,
+      String nombres,
+      String tipousuario,
+      String correo,
+      String contrasena,
+      String telefono,
+      String ciudad,
+      String cv,
+      String userid) async {
     try {
       //crear postulacion para empleado
       await firebase
@@ -104,7 +150,7 @@ class _DescripcionState extends State<Descripcion> {
           .collection('Postulaciones')
           .doc()
           .set({
-        "idPostulación": controlf.uid,
+        "idPostulado": controlf.uid,
         "idusercreador": widget.iduser,
         "idvacante": widget.idvacante,
         "fechacreacion": widget.fechacreacion,
@@ -116,7 +162,7 @@ class _DescripcionState extends State<Descripcion> {
         "ciudad": widget.ciudad,
         "estado": widget.estado,
       });
-      //crear postuladPo en user creador (EMLEADOR)
+      //crear postulado en user creador (EMLEADOR)
       //necesito consultar el usuario para pasarlo, el id del usuario esta en controlf.uid,
       // es decir el usuario que esta actualmente en login
 
@@ -128,9 +174,15 @@ class _DescripcionState extends State<Descripcion> {
           .collection('Postulados')
           .doc()
           .set({
-        "idPostulado": controlf.uid,
-        "idusercreador": widget.iduser,
-        "correo": controlf.emailf
+        "foto": foto,
+        "nombres": nombres,
+        "tipousuario": tipousuario,
+        "correo": correo,
+        "contraseña": contrasena,
+        "telefono": telefono,
+        "ciudad": ciudad,
+        "cv": cv,
+        "userid": userid
       });
 
       showDialog(

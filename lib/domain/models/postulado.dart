@@ -1,44 +1,48 @@
 class Postulado {
-  final String idPostulado;
-  final String idusercreador;
-  final String nombre;
-  final String correo;
-  final String telefono;
   final String ciudad;
-  final String foto;
+  final String contrasena;
+  final String correo;
   final String cv;
+  final String foto;
+  final String nombres;
+  final String telefono;
+  final String tipousuario;
+  final String userid;
 
   Postulado(
-      {required this.idPostulado,
-      required this.idusercreador,
-      required this.nombre,
+      {required this.ciudad,
+      required this.contrasena,
       required this.correo,
-      required this.telefono,
-      required this.ciudad,
+      required this.cv,
       required this.foto,
-      required this.cv});
+      required this.nombres,
+      required this.telefono,
+      required this.tipousuario,
+      required this.userid});
 
   factory Postulado.desdeDoc(Map<String, dynamic> data) {
     return Postulado(
-      idPostulado: data['idPostulado'] ?? '',
-      idusercreador: data['idusercreador'] ?? '',
-      nombre: data['nombre'] ?? '',
-      correo: data['correo'] ?? '',
-      telefono: data['telefono'] ?? '',
       ciudad: data['ciudad'] ?? '',
-      foto: data['foto'] ?? '',
+      contrasena: data['contraseña'] ?? '',
+      correo: data['correo'] ?? '',
       cv: data['cv'] ?? '',
+      foto: data['foto'] ?? '',
+      nombres: data['nombres'] ?? '',
+      telefono: data['telefono'] ?? '',
+      tipousuario: data['tipousuario'] ?? '',
+      userid: data['userid'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "idPostulado": idPostulado,
-        "idusercreador": idusercreador,
-        "nombre": nombre,
-        "correo": correo,
-        "telefono": telefono,
         "ciudad": ciudad,
-        "foto": foto,
+        "contraseña": contrasena,
+        "correo": correo,
         "cv": cv,
+        "foto": foto,
+        "nombres": nombres,
+        "telefono": telefono,
+        "tipousuario": tipousuario,
+        "userid": userid,
       };
 }

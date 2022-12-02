@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/app.dart';
 import 'package:jobseeker/domain/controller/controllerfirebase.dart';
 import 'package:jobseeker/domain/controller/controllerfirebasePostulados.dart';
+import 'package:jobseeker/domain/controller/controllerfirebaseUsuario.dart';
 
 import 'domain/controller/controladorAuth.dart';
 
@@ -22,5 +23,6 @@ void main() async {
   Get.put(Controllerauthf());
   Get.put(ConsultasController());
   Get.put(ConsultasControllerPostulados());
+  Get.put(ConsultasControllerUsuarios());
   runApp(const App());
 }

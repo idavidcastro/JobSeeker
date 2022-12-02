@@ -56,13 +56,16 @@ class _PostuladosEMPState extends State<PostuladosEMP> {
                 */
                     },
                     leading: CircleAvatar(
-                        child: Text(controladorpostulado
-                            .getPostulados![posicion].correo
-                            .substring(0, 1))),
+                        backgroundColor: Colors.black,
+                        child: Text(
+                          controladorpostulado.getPostulados![posicion].nombres
+                              .substring(0, 1),
+                          style: const TextStyle(color: Colors.white),
+                        )),
                     title: Text(
-                        controladorpostulado.getPostulados![posicion].correo),
+                        controladorpostulado.getPostulados![posicion].nombres),
                     subtitle: Text(
-                        controladorpostulado.getPostulados![posicion].correo),
+                        controladorpostulado.getPostulados![posicion].telefono),
                     trailing: const Icon(Icons.call),
                   );
                 })
