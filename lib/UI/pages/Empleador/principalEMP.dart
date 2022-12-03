@@ -30,9 +30,9 @@ class _BottomNavigationEMPState extends State<BottomNavigationEMP> {
         backgroundColor: Colors.black,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.create), label: 'Nueva'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.menu), label: 'Configuración'),
+              icon: Icon(Icons.home), label: 'Mis Vacantes'),
+          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Perfil'),
         ]);
   }
 }

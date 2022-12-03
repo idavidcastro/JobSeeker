@@ -85,7 +85,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                                 _image,
                                 width: 100,
                                 height: 100,
-                                fit: BoxFit.fitHeight,
+                                fit: BoxFit.cover,
                               ),
                             )
                           : Container(
@@ -241,7 +241,6 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                                       )
                                     ],
                                   ));
-                          limpiar();
                         } else {
                           showDialog(
                               context: context,
@@ -326,6 +325,7 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   }
 
   limpiar() {
+    _image = "";
     controlcorreoelectronico.clear();
     controlcontrasena.clear();
     controlapellidos.clear();
@@ -350,8 +350,10 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
         "telefono": controltelefono.text,
         "ciudad": valueChooseCiudades,
         "cv": '',
-        "userid": uid
+        "userid": uid,
+        "estado": ""
       });
+      limpiar();
     } catch (e) {
       print('Error...' + e.toString());
     }

@@ -8,6 +8,7 @@ class Usuario {
   final String ciudad;
   final String cv;
   final String userid;
+  final String estado;
 
   Usuario({
     required this.foto,
@@ -19,6 +20,7 @@ class Usuario {
     required this.ciudad,
     required this.cv,
     required this.userid,
+    required this.estado,
   });
 
   factory Usuario.desdeDoc(Map<String, dynamic> data) {
@@ -32,6 +34,7 @@ class Usuario {
       ciudad: data['ciudad'] ?? '',
       cv: data['cv'] ?? '',
       userid: data['userid'] ?? '',
+      estado: data['estado'] ?? '',
     );
   }
 
@@ -45,5 +48,6 @@ class Usuario {
         "ciudad": ciudad,
         "cv": cv,
         "userid": userid,
+        "estado": estado,
       };
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/controller/controllerfirebase.dart';
@@ -38,7 +39,7 @@ class _BienvenidaState extends State<Bienvenida> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('INICIO'),
+          title: const Text('MIS POSTULACIONES'),
           backgroundColor: Colors.black,
         ),
         body: Obx(
@@ -66,118 +67,96 @@ class _BienvenidaState extends State<Bienvenida> {
                               ],
                               //border: Border.all(color: Colors.black, width: 6.0)
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          15, 12, 15, 0),
-                                      child: Text(controladorvacante
-                                          .getVacantesGral![posicion].empresa),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          15, 0, 15, 2),
-                                      child: Text(
-                                          controladorvacante
-                                              .getVacantesGral![posicion].cargo,
-                                          style: const TextStyle(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          15, 0, 15, 2),
-                                      child: Text(controladorvacante
-                                          .getVacantesGral![posicion].salario),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          15, 0, 15, 12),
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.location_on,
-                                            size: 15.0,
-                                          ),
-                                          Text(controladorvacante
-                                              .getVacantesGral![posicion]
-                                              .ciudad),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                            child: Slidable(
+                              endActionPane: ActionPane(
+                                motion: const BehindMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {},
+                                    backgroundColor: Colors.red,
+                                    icon: Icons.delete,
+                                    label: 'Eliminar',
+                                  )
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.check_circle),
-                                            Text(
-                                              'Aplicada',
-                                              style: TextStyle(fontSize: 8),
-                                            )
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 12, 15, 0),
+                                        child: Text(controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .empresa),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 2),
+                                        child: Text(
+                                            controladorvacante
+                                                .getVacantesGral![posicion]
+                                                .cargo,
+                                            style: const TextStyle(
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 2),
+                                        child: Text(controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .salario),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 12),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on,
+                                              size: 15.0,
+                                            ),
+                                            Text(controladorvacante
+                                                .getVacantesGral![posicion]
+                                                .ciudad),
                                           ],
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.check_circle_outline),
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.check_circle,
+                                              size: 12,
+                                            ),
                                             Text(
-                                              'CV Visto',
-                                              style: TextStyle(fontSize: 8),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.check_circle_outline),
-                                            Text(
-                                              'En proceso',
-                                              style: TextStyle(fontSize: 8),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: const [
-                                            Icon(Icons.check_circle_outline),
-                                            Text(
-                                              'Finalista',
-                                              style: TextStyle(fontSize: 8),
-                                            )
+                                              " " +
+                                                  controladorvacante
+                                                      .getVacantesGral![
+                                                          posicion]
+                                                      .estado,
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                            ),
                                           ],
                                         ),
                                       )
                                     ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           onTap: () {
@@ -213,7 +192,21 @@ class _BienvenidaState extends State<Bienvenida> {
                           }),
                     );
                   })
-              : const Icon(Icons.abc),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.error,
+                        size: 50,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No se encontraron registros'),
+                      )
+                    ],
+                  ),
+                ),
         ),
       ),
     );

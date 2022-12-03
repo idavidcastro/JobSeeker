@@ -97,7 +97,21 @@ class _DescripcionState extends State<Descripcion> {
                         widget.idvacante)
                   ]);
                 })
-            : const Icon(Icons.abc),
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.error,
+                      size: 50,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('No se encontraron registros'),
+                    )
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -186,7 +200,7 @@ class _DescripcionState extends State<Descripcion> {
             .collection('Usuarios')
             .doc(controlf.uid)
             .collection('Postulaciones')
-            .doc()
+            .doc(widget.idvacante)
             .set({
           "idPostulado": controlf.uid,
           "idusercreador": widget.iduser,
@@ -198,7 +212,7 @@ class _DescripcionState extends State<Descripcion> {
           "requisitos": widget.requisitos,
           "salario": widget.salario,
           "ciudad": widget.ciudad,
-          "estado": widget.estado,
+          "estado": 'Aplicado',
         });
         //crear postulado en user creador (EMLEADOR)
         //necesito consultar el usuario para pasarlo, el id del usuario esta en controlf.uid,
@@ -210,7 +224,7 @@ class _DescripcionState extends State<Descripcion> {
             .collection('Vacantes')
             .doc(widget.idvacante)
             .collection('Postulados')
-            .doc()
+            .doc(controlf.uid)
             .set({
           "foto": foto,
           "nombres": nombres,
@@ -220,7 +234,8 @@ class _DescripcionState extends State<Descripcion> {
           "telefono": telefono,
           "ciudad": ciudad,
           "cv": cv,
-          "userid": userid
+          "userid": userid,
+          "estado": 'Aplicado'
         });
 
         showDialog(

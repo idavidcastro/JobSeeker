@@ -248,7 +248,21 @@ class _PageBusquedaState extends State<PageBusqueda> {
                           }),
                     );
                   })
-              : const Icon(Icons.abc),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.error,
+                        size: 50,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No se encontraron registros'),
+                      )
+                    ],
+                  ),
+                ),
         ),
       ),
     );

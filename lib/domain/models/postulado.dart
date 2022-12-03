@@ -8,6 +8,7 @@ class Postulado {
   final String telefono;
   final String tipousuario;
   final String userid;
+  final String estado;
 
   Postulado(
       {required this.ciudad,
@@ -18,7 +19,8 @@ class Postulado {
       required this.nombres,
       required this.telefono,
       required this.tipousuario,
-      required this.userid});
+      required this.userid,
+      required this.estado});
 
   factory Postulado.desdeDoc(Map<String, dynamic> data) {
     return Postulado(
@@ -31,6 +33,7 @@ class Postulado {
       telefono: data['telefono'] ?? '',
       tipousuario: data['tipousuario'] ?? '',
       userid: data['userid'] ?? '',
+      estado: data['estado'] ?? '',
     );
   }
 
@@ -44,5 +47,6 @@ class Postulado {
         "telefono": telefono,
         "tipousuario": tipousuario,
         "userid": userid,
+        "estado": estado,
       };
 }

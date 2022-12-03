@@ -29,7 +29,7 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('INICIO'),
+          title: const Text('MIS VACANTES'),
           backgroundColor: Colors.black,
         ),
         floatingActionButton: FloatingActionButton(
@@ -166,7 +166,21 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
                           }),
                     );
                   })
-              : const Icon(Icons.abc),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.error,
+                        size: 50,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No se encontraron registros'),
+                      )
+                    ],
+                  ),
+                ),
         ),
         /*
         body: ListView(
