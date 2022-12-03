@@ -37,6 +37,8 @@ class Descripcion extends StatefulWidget {
 class _DescripcionState extends State<Descripcion> {
   Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
+
+  bool booleanoPostulaciones = false;
   @override
   Widget build(BuildContext context) {
     ConsultasControllerUsuarios controladorusuario = Get.find();
@@ -83,16 +85,16 @@ class _DescripcionState extends State<Descripcion> {
                     Text(widget.ciudad, style: TextStyle(fontSize: 18.0)),
                     const Padding(padding: EdgeInsets.all(25.0)),
                     _bottonPostularse(
-                      controladorusuario.getUsuarios![posicion].foto,
-                      controladorusuario.getUsuarios![posicion].nombres,
-                      controladorusuario.getUsuarios![posicion].tipousuario,
-                      controladorusuario.getUsuarios![posicion].correo,
-                      controladorusuario.getUsuarios![posicion].contrasena,
-                      controladorusuario.getUsuarios![posicion].telefono,
-                      controladorusuario.getUsuarios![posicion].ciudad,
-                      controladorusuario.getUsuarios![posicion].cv,
-                      controladorusuario.getUsuarios![posicion].userid,
-                    )
+                        controladorusuario.getUsuarios![posicion].foto,
+                        controladorusuario.getUsuarios![posicion].nombres,
+                        controladorusuario.getUsuarios![posicion].tipousuario,
+                        controladorusuario.getUsuarios![posicion].correo,
+                        controladorusuario.getUsuarios![posicion].contrasena,
+                        controladorusuario.getUsuarios![posicion].telefono,
+                        controladorusuario.getUsuarios![posicion].ciudad,
+                        controladorusuario.getUsuarios![posicion].cv,
+                        controladorusuario.getUsuarios![posicion].userid,
+                        widget.idvacante)
                   ]);
                 })
             : const Icon(Icons.abc),
@@ -109,7 +111,8 @@ class _DescripcionState extends State<Descripcion> {
       String telefono,
       String ciudad,
       String cv,
-      String userid) {
+      String userid,
+      String idvacante) {
     // ignore: prefer_const_constructors
     return StreamBuilder(
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -126,8 +129,10 @@ class _DescripcionState extends State<Descripcion> {
           elevation: 50.0,
           color: Colors.black,
           onPressed: () {
+            print('booleano postulaciones antes xd');
+            print(booleanoPostulaciones);
             crearPostulacion(foto, nombres, tipousuario, correo, contrasena,
-                telefono, ciudad, cv, userid);
+                telefono, ciudad, cv, userid, idvacante);
           });
     });
   }
@@ -141,55 +146,30 @@ class _DescripcionState extends State<Descripcion> {
       String telefono,
       String ciudad,
       String cv,
-      String userid) async {
-    try {
-      //crear postulacion para empleado
-      await firebase
-          .collection('Usuarios')
-          .doc(controlf.uid)
-          .collection('Postulaciones')
-          .doc()
-          .set({
-        "idPostulado": controlf.uid,
-        "idusercreador": widget.iduser,
-        "idvacante": widget.idvacante,
-        "fechacreacion": widget.fechacreacion,
-        "empresa": widget.empresa,
-        "cargo": widget.cargo,
-        "descripcion": widget.descripcion,
-        "requisitos": widget.requisitos,
-        "salario": widget.salario,
-        "ciudad": widget.ciudad,
-        "estado": widget.estado,
-      });
-      //crear postulado en user creador (EMLEADOR)
-      //necesito consultar el usuario para pasarlo, el id del usuario esta en controlf.uid,
-      // es decir el usuario que esta actualmente en login
+      String userid,
+      String idvacante) async {
+    bool encontro = false;
+    CollectionReference ref = FirebaseFirestore.instance
+        .collection('Usuarios')
+        .doc(controlf.uid)
+        .collection('Postulaciones');
+    QuerySnapshot usuario = await ref.get();
+    if (usuario.docs.length != 0) {
+      for (var cursor in usuario.docs) {
+        if (cursor.get('idvacante') == idvacante) {
+          encontro = true;
+          print('si lo encontro xd xd');
+        }
+      }
+    }
 
-      await firebase
-          .collection('Usuarios')
-          .doc(widget.iduser)
-          .collection('Vacantes')
-          .doc(widget.idvacante)
-          .collection('Postulados')
-          .doc()
-          .set({
-        "foto": foto,
-        "nombres": nombres,
-        "tipousuario": tipousuario,
-        "correo": correo,
-        "contraseña": contrasena,
-        "telefono": telefono,
-        "ciudad": ciudad,
-        "cv": cv,
-        "userid": userid
-      });
-
+    if (encontro == true) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
                 title: const Text('Error'),
-                content: const Text('Se ha postulado a la vacante'),
+                content:
+                    const Text('El usuario ya está postulado en esta vacante'),
                 actions: <Widget>[
                   MaterialButton(
                     child: const Text('Ok'),
@@ -199,9 +179,68 @@ class _DescripcionState extends State<Descripcion> {
                   )
                 ],
               ));
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error...' + e.toString());
+    } else {
+      try {
+        //crear postulacion para empleado
+        await firebase
+            .collection('Usuarios')
+            .doc(controlf.uid)
+            .collection('Postulaciones')
+            .doc()
+            .set({
+          "idPostulado": controlf.uid,
+          "idusercreador": widget.iduser,
+          "idvacante": widget.idvacante,
+          "fechacreacion": widget.fechacreacion,
+          "empresa": widget.empresa,
+          "cargo": widget.cargo,
+          "descripcion": widget.descripcion,
+          "requisitos": widget.requisitos,
+          "salario": widget.salario,
+          "ciudad": widget.ciudad,
+          "estado": widget.estado,
+        });
+        //crear postulado en user creador (EMLEADOR)
+        //necesito consultar el usuario para pasarlo, el id del usuario esta en controlf.uid,
+        // es decir el usuario que esta actualmente en login
+
+        await firebase
+            .collection('Usuarios')
+            .doc(widget.iduser)
+            .collection('Vacantes')
+            .doc(widget.idvacante)
+            .collection('Postulados')
+            .doc()
+            .set({
+          "foto": foto,
+          "nombres": nombres,
+          "tipousuario": tipousuario,
+          "correo": correo,
+          "contraseña": contrasena,
+          "telefono": telefono,
+          "ciudad": ciudad,
+          "cv": cv,
+          "userid": userid
+        });
+
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text('Error'),
+                  content: const Text('Se ha postulado a la vacante'),
+                  actions: <Widget>[
+                    MaterialButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ));
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error...' + e.toString());
+        }
       }
     }
   }

@@ -32,6 +32,7 @@ class _BienvenidaState extends State<Bienvenida> {
   Widget build(BuildContext context) {
     ConsultasController controladorvacante = Get.find();
     controladorvacante.consultaVacantesPostulaciones().then((value) => null);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -98,43 +99,114 @@ class _BienvenidaState extends State<Bienvenida> {
                               ],
                               //border: Border.all(color: Colors.black, width: 6.0)
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 12, 15, 0),
-                                  child: Text(controladorvacante
-                                      .getVacantesGral![posicion].empresa),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 0, 15, 2),
-                                  child: Text(
-                                      controladorvacante
-                                          .getVacantesGral![posicion].cargo,
-                                      style: const TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 0, 15, 2),
-                                  child: Text(controladorvacante
-                                      .getVacantesGral![posicion].salario),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 0, 15, 12),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        size: 15.0,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 12, 15, 0),
+                                      child: Text(controladorvacante
+                                          .getVacantesGral![posicion].empresa),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 15, 2),
+                                      child: Text(
+                                          controladorvacante
+                                              .getVacantesGral![posicion].cargo,
+                                          style: const TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 15, 2),
+                                      child: Text(controladorvacante
+                                          .getVacantesGral![posicion].salario),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 15, 12),
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on,
+                                            size: 15.0,
+                                          ),
+                                          Text(controladorvacante
+                                              .getVacantesGral![posicion]
+                                              .ciudad),
+                                        ],
                                       ),
-                                      Text(controladorvacante
-                                          .getVacantesGral![posicion].ciudad),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(Icons.check_circle),
+                                            Text(
+                                              'Aplicada',
+                                              style: TextStyle(fontSize: 8),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(Icons.check_circle_outline),
+                                            Text(
+                                              'CV Visto',
+                                              style: TextStyle(fontSize: 8),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(Icons.check_circle_outline),
+                                            Text(
+                                              'En proceso',
+                                              style: TextStyle(fontSize: 8),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: const [
+                                            Icon(Icons.check_circle_outline),
+                                            Text(
+                                              'Finalista',
+                                              style: TextStyle(fontSize: 8),
+                                            )
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),

@@ -1,7 +1,9 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:jobseeker/UI/pages/Empleador/postuladosEMP.dart';
+import 'package:get/get.dart';
+
+import '../../../domain/controller/controllerfirebasePostulados.dart';
 
 class DescripcionEMP extends StatefulWidget {
   String iduser;
@@ -35,63 +37,108 @@ class DescripcionEMP extends StatefulWidget {
 class _DescripcionEMPState extends State<DescripcionEMP> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('DESCRIPCIÓN DE VACANTE'),
-        backgroundColor: Colors.black,
-      ),
-      body: new Center(
-        child: new Column(children: [
-          Padding(padding: new EdgeInsets.all(20.0)),
-          Text('ID VACANTE ',
-              style: new TextStyle(fontWeight: FontWeight.bold)),
-          Padding(padding: new EdgeInsets.all(5.0)),
+    ConsultasControllerPostulados controladorpostulado = Get.find();
+    controladorpostulado
+        .consultaPostulados(widget.idvacante)
+        .then((value) => null);
+
+    final _paginas = <Widget>[
+      Center(
+        child: Column(children: [
+          const Padding(padding: EdgeInsets.all(20.0)),
+          const Text('ID VACANTE ',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const Padding(padding: EdgeInsets.all(5.0)),
           Text(
             widget.idvacante,
-            style: new TextStyle(fontSize: 18.0),
+            style: const TextStyle(fontSize: 18.0),
           ),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('EMPRESA ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.empresa, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text(' CARGO ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.cargo, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('SALARIO ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.salario, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(10.0)),
-          Text('CIUDAD ', style: new TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.ciudad, style: new TextStyle(fontSize: 18.0)),
-          Padding(padding: new EdgeInsets.all(25.0)),
-          _bottonPostulados()
+          const Padding(padding: EdgeInsets.all(10.0)),
+          const Text('EMPRESA ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(widget.empresa, style: const TextStyle(fontSize: 18.0)),
+          const Padding(padding: EdgeInsets.all(10.0)),
+          const Text(' CARGO ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
+          const Padding(padding: EdgeInsets.all(10.0)),
+          const Text('SALARIO ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(widget.salario, style: const TextStyle(fontSize: 18.0)),
+          const Padding(padding: EdgeInsets.all(10.0)),
+          const Text('CIUDAD ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(widget.ciudad, style: const TextStyle(fontSize: 18.0)),
+          const Padding(padding: EdgeInsets.all(25.0)),
         ]),
       ),
-    );
-  }
 
-  Widget _bottonPostulados() {
-    // ignore: prefer_const_constructors
-    return StreamBuilder(
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-      return MaterialButton(
-          child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
-            child: const Text('Ver Postulados',
-                style: TextStyle(color: Colors.white, fontSize: 14)),
+      //otro widget otra pagina aqui abajo
+      Obx(
+        () => controladorpostulado.getPostulados?.isEmpty == false
+            ? ListView.builder(
+                itemCount: controladorpostulado.getPostulados?.isEmpty == true
+                    ? 0
+                    : controladorpostulado.getPostulados!.length,
+                itemBuilder: (context, posicion) {
+                  return ListTile(
+                    onLongPress: () {
+                      // _eliminarclientes(context, _clientes[0]);
+                    },
+                    onTap: () {
+                      /*
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AdicionarClientes(
+                        gestioncliente: _clientes[index]), //Llamar la Vista
+                  ),
+                ).then((resultado) //Espera por un Resultado
+                    {
+                  if (resultado != null) {
+                    _clientes[index] = resultado[
+                        0]; //Adiciona a la lista lo que recupera de la vista TextoEjercicio
+                    setState(() {});
+                  }
+                });
+                */
+                    },
+                    leading: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        child: Text(
+                          controladorpostulado.getPostulados![posicion].nombres
+                              .substring(0, 1),
+                          style: const TextStyle(color: Colors.white),
+                        )),
+                    title: Text(
+                        controladorpostulado.getPostulados![posicion].nombres),
+                    subtitle: Text(
+                        controladorpostulado.getPostulados![posicion].telefono),
+                    trailing: const Icon(Icons.call),
+                  );
+                })
+            : const Icon(Icons.abc),
+      ),
+    ];
+    final _kTabs = <Tab>[
+      const Tab(
+        text: 'Descripción',
+      ),
+      const Tab(
+        text: 'Postulados',
+      ),
+    ];
+    return DefaultTabController(
+      length: _kTabs.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('DETALLES DE LA OFERTA'),
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          bottom: TabBar(
+            tabs: _kTabs,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 50.0,
-          color: Colors.black,
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => PostuladosEMP(widget.idvacante)));
-          });
-    });
+        ),
+        body: TabBarView(
+          children: _paginas,
+        ),
+      ),
+    );
   }
 }

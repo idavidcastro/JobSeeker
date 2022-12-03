@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,6 +33,8 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   ];
   String? valueChoose = 'Empleado';
   String? valueChooseCiudades = 'Valledupar';
+  ImagePicker picker = ImagePicker();
+  var _image;
 
   TextEditingController controlnombres = TextEditingController();
   TextEditingController controlapellidos = TextEditingController();
@@ -40,6 +44,18 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   TextEditingController controlcorreoelectronico = TextEditingController();
   Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
+  final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+
+  _camGaleria(bool op) async {
+    XFile? image;
+    image = op
+        ? await picker.pickImage(source: ImageSource.camera, imageQuality: 50)
+        : await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+
+    setState(() {
+      _image = (image != null) ? File(image.path) : null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +71,35 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.blue,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(48),
-                      ),
-                      width: 100,
-                      height: 100,
-                      child: const Icon(
-                        Icons.camera_alt_outlined,
-                        color: Colors.white,
-                      ),
+                  child: GestureDetector(
+                    onTap: () async {
+                      _opcioncamara(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.black,
+                      child: _image != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(48),
+                              child: Image.file(
+                                _image,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(48),
+                              ),
+                              width: 100,
+                              height: 100,
+                              child: const Icon(
+                                Icons.camera_alt_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -265,6 +296,35 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
         ));
   }
 
+  void _opcioncamara(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Imagen de Galeria'),
+                    onTap: () {
+                      _camGaleria(false);
+                      Get.back();
+                      // Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Capturar Imagen'),
+                  onTap: () {
+                    _camGaleria(true);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   limpiar() {
     controlcorreoelectronico.clear();
     controlcontrasena.clear();
@@ -274,9 +334,15 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
   }
 
   registrarUserProfile(String uid) async {
+    print(_image);
+    var url = '';
+    if (_image != null) {
+      url = await cargarfoto(_image, uid);
+    }
+
     try {
       await firebase.collection('Usuarios').doc(uid).set({
-        "foto": '',
+        "foto": url,
         "nombres": controlnombres.text,
         "tipousuario": valueChoose,
         "correo": controlcorreoelectronico.text,
@@ -289,6 +355,18 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
     } catch (e) {
       print('Error...' + e.toString());
     }
+  }
+
+  static Future<dynamic> cargarfoto(var foto, var idUser) async {
+    final fs.Reference storageReference =
+        fs.FirebaseStorage.instance.ref().child("Usuarios");
+
+    fs.TaskSnapshot taskSnapshot =
+        await storageReference.child(idUser).putFile(foto);
+
+    var url = await taskSnapshot.ref.getDownloadURL();
+
+    return url.toString();
   }
 
   registrarUsuario(String tipousuario, String correo, String passwd) async {
