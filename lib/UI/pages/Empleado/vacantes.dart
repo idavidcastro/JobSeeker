@@ -41,39 +41,6 @@ class _BienvenidaState extends State<Bienvenida> {
           title: const Text('INICIO'),
           backgroundColor: Colors.black,
         ),
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child: const Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                        title: const Text('Eliminar'),
-                        content:
-                            const Text('Desea eliminar esta postulación?.'),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                setState(() {});
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Sí',
-                                style: TextStyle(color: Colors.black),
-                              )),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Cancelar',
-                                style: TextStyle(color: Colors.red),
-                              ))
-                        ],
-                      ));
-              _value = false;
-              _value2 = false;
-            }),
         body: Obx(
           () => controladorvacante.getVacantesGral?.isEmpty == false
               ? ListView.builder(

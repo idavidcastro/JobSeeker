@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/Empleado/editarconfig.dart';
+import 'package:jobseeker/domain/controller/controllerfirebaseUsuario.dart';
+import '../../../domain/controller/controladorAuth.dart';
 import '../login.dart';
 
 class PageConfig extends StatefulWidget {
@@ -13,6 +16,10 @@ class PageConfig extends StatefulWidget {
 class _PageConfigState extends State<PageConfig> {
   @override
   Widget build(BuildContext context) {
+    Controllerauthf controlf = Get.find();
+    ConsultasControllerUsuarios controladorusuarios = Get.find();
+    controladorusuarios.consultaPostulados(controlf.uid).then((value) => null);
+    var imagen;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -21,185 +28,232 @@ class _PageConfigState extends State<PageConfig> {
         backgroundColor: Colors.black,
         title: const Text('PERFIL'),
       ),
-      body: ListView(
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 70.0,
-            ),
-          ),
-          const Divider(),
-          Column(
-            children: const [
-              Text(
-                'Información Personal',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
+      body: Obx(
+        () => controladorusuarios.getUsuarios?.isEmpty == false
+            ? ListView.builder(
+                itemCount: controladorusuarios.getUsuarios?.isEmpty == true
+                    ? 0
+                    : controladorusuarios.getUsuarios!.length,
+                itemBuilder: (context, posicion) {
+                  var imagen;
+                  return Column(
+                    children: [
+                      Column(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircleAvatar(
+                            radius: 70,
+                            backgroundColor: Colors.black,
+                            child: imagen != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(48),
+                                    child: Image.file(
+                                      imagen,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(48),
+                                    ),
+                                    width: 100,
+                                    height: 100,
+                                    child: const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(33.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text('Rol: ',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].tipousuario,
+                                      style: const TextStyle(fontSize: 15)),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Nombres: ',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].nombres,
+                                      style: const TextStyle(fontSize: 15)),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Ciudad: ',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].ciudad,
+                                      style: const TextStyle(fontSize: 15)),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Correo: ',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].correo,
+                                      style: const TextStyle(fontSize: 15)),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Teléfono: ',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].telefono,
+                                      style: const TextStyle(fontSize: 15)),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Icon(
+                              Icons.document_scanner,
+                              size: 50,
+                            ),
+                          ),
+                        ),
+                      ]),
+                      Padding(
+                        padding: const EdgeInsets.all(80),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MaterialButton(
+                              elevation: 10.0,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const EditarConfig()),
+                                );
+                                setState(() {});
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              highlightElevation: 20.0,
+                              color: Colors.black,
+                              textColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 20.0),
+                              child: const Text('Modificar'),
+                            ),
+                            MaterialButton(
+                              elevation: 10.0,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          title: const Text('Cerrar Sesión'),
+                                          content: const Text(
+                                              'Desea cerrar sesión?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            const Login()),
+                                                  );
+                                                  setState(() {});
+                                                  //Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  'Sí',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                )),
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text(
+                                                  'Cancelar',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ))
+                                          ],
+                                        ));
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              highlightElevation: 20.0,
+                              color: Colors.black,
+                              textColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 20.0),
+                              child: const Text('Cerrar Sesión'),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                })
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text('Rol: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Empleado'),
+                    Icon(
+                      Icons.error,
+                      size: 50,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('No se encontraron registros'),
+                    )
                   ],
                 ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Row(
-                  children: const [
-                    Text('Nombres: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Iván David'),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Row(
-                  children: const [
-                    Text('Apellidos: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Castro Blanco'),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Row(
-                  children: const [
-                    Text('Ciudad: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Valledupar, CO'),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          //////////
-          Column(
-            children: const [
-              Text(
-                'Información Académica',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: const [
-                    Text('Pregrado: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Ingeniero de Sistemas'),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Row(
-                  children: const [
-                    Text('Universidad: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Universidad popular del Cesar'),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                const Divider()
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MaterialButton(
-                  elevation: 10.0,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const EditarConfig()),
-                    );
-                    setState(() {});
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  highlightElevation: 20.0,
-                  color: Colors.black,
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
-                  child: const Text('Modificar'),
-                ),
-                MaterialButton(
-                  elevation: 10.0,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                              title: const Text('Cerrar Sesión'),
-                              content: const Text('Desea cerrar sesión?'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => const Login()),
-                                      );
-                                      setState(() {});
-                                      //Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Sí',
-                                      style: TextStyle(color: Colors.black),
-                                    )),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Cancelar',
-                                      style: TextStyle(color: Colors.red),
-                                    ))
-                              ],
-                            ));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  highlightElevation: 20.0,
-                  color: Colors.black,
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
-                  child: const Text('Cerrar Sesión'),
-                )
-              ],
-            ),
-          )
-        ],
+              ),
       ),
     ));
   }

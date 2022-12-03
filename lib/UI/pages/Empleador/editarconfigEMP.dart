@@ -1,4 +1,12 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as fs;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../domain/controller/controladorAuth.dart';
 
 class EditarConfigEMP extends StatefulWidget {
   const EditarConfigEMP({Key? key}) : super(key: key);
@@ -8,32 +16,100 @@ class EditarConfigEMP extends StatefulWidget {
 }
 
 class _EditarConfigEMPState extends State<EditarConfigEMP> {
+  List<String> listCiudades = [
+    'Valledupar',
+    'Santa Marta',
+    'Barranquilla',
+    'Bogotá',
+    'Medellín',
+    'Cali'
+  ];
+
+  String? valueChooseCiudades = 'Valledupar';
+  ImagePicker picker = ImagePicker();
+  var _image;
+
+  TextEditingController controlnombres = TextEditingController();
+  TextEditingController controlapellidos = TextEditingController();
+  TextEditingController controltelefono = TextEditingController();
+  TextEditingController controlcontrasena = TextEditingController();
+  TextEditingController controltipousuario = TextEditingController();
+  TextEditingController controlcorreoelectronico = TextEditingController();
+  Controllerauthf controlf = Get.find();
+  final firebase = FirebaseFirestore.instance;
+  final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+
+  _camGaleria(bool op) async {
+    XFile? image;
+    image = op
+        ? await picker.pickImage(source: ImageSource.camera, imageQuality: 50)
+        : await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+
+    setState(() {
+      _image = (image != null) ? File(image.path) : null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.black,
-          title: const Text('Modificar Perfil'),
-          automaticallyImplyLeading: true,
+          title: const Text('EDITAR INFORMACIÓN'),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _titulo(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
-                child: TextField(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () async {
+                      _opcioncamara(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.black,
+                      child: _image != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(48),
+                              child: Image.file(
+                                _image,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(48),
+                              ),
+                              width: 100,
+                              height: 100,
+                              child: const Icon(
+                                Icons.camera_alt_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
+                child: TextFormField(
+                  controller: controlnombres,
                   decoration: InputDecoration(
                       filled: true,
-                      //hintText: 'Tipo Usuario',
-                      labelText: 'Nombres',
-                      icon: const Icon(Icons.business),
+                      labelText: 'Nombre completo de usuario o compañía',
+                      icon: const Icon(Icons.person_add_alt_1_outlined),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          //controlEmpresa.clear();
+                          controlnombres.clear();
                         },
                       )
                       //probar suffix
@@ -42,16 +118,17 @@ class _EditarConfigEMPState extends State<EditarConfigEMP> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextField(
+                child: TextFormField(
+                  controller: controlcorreoelectronico,
                   decoration: InputDecoration(
                       filled: true,
-                      labelText: 'Pregrado',
-                      icon: const Icon(Icons.person),
+                      labelText: 'Correo electronico',
+                      icon: const Icon(Icons.message),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          //controlCargo.clear();
+                          controlcorreoelectronico.clear();
                         },
                       )
                       //probar suffix
@@ -60,16 +137,18 @@ class _EditarConfigEMPState extends State<EditarConfigEMP> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextField(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: controltelefono,
                   decoration: InputDecoration(
                       filled: true,
-                      labelText: 'Universidad',
-                      icon: const Icon(Icons.location_city),
+                      labelText: 'Teléfono',
+                      icon: const Icon(Icons.phone),
                       // suffix: Icon(Icons.access_alarm),
                       suffix: GestureDetector(
                         child: const Icon(Icons.close),
                         onTap: () {
-                          //controlSalario.clear();
+                          controltelefono.clear();
                         },
                       )
                       //probar suffix
@@ -78,53 +157,86 @@ class _EditarConfigEMPState extends State<EditarConfigEMP> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Ciudad',
-                      icon: const Icon(Icons.location_on),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          //controlCiudad.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
+                child: DropdownButton(
+                  value: valueChooseCiudades,
+                  onChanged: (String? value) {
+                    setState(() {
+                      valueChooseCiudades = value;
+                    });
+                  },
+                  items: listCiudades
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem(value: value, child: Text(value));
+                  }).toList(),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: const EdgeInsets.fromLTRB(50, 15, 50, 20),
                 child: MaterialButton(
                   elevation: 10.0,
                   onPressed: () {
-                    // dialogo
-                    showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                              title: const Text('Modificar Perfil'),
-                              content:
-                                  const Text('Se ha modificado correctamente.'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      setState(() {});
-                                    },
-                                    child: const Text(
-                                      'Ok',
-                                      style: TextStyle(color: Colors.black),
-                                    ))
-                              ],
-                            ));
-                    // Devuelvo los datos de la lista _usuarioadd
                     /*
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ListarUsuario())); //Llamar la Vista
-                      */
+                    if (controlcontrasena.text.isNotEmpty &&
+                        controlnombres.text.isNotEmpty &&
+                        controltelefono.text.isNotEmpty &&
+                        controlcorreoelectronico.text.isNotEmpty) {
+                      controlf
+                          .registrarEmail(controlcorreoelectronico.text,
+                              controlcontrasena.text, valueChoose.toString())
+                          .then((value) {
+                        if (controlf.emailf != 'Sin registro') {
+                          registrarUserProfile(controlf.uid);
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Nuevo Usuario'),
+                                    content:
+                                        const Text('Usuario nuevo registrado'),
+                                    actions: <Widget>[
+                                      MaterialButton(
+                                        child: const Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                          limpiar();
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'El usuario ya está registrado con este correo'),
+                                    actions: <Widget>[
+                                      MaterialButton(
+                                        child: const Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                        }
+                      }).catchError((onError) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text(
+                                      'El usuario ya está registrado con este correo'),
+                                  actions: <Widget>[
+                                    MaterialButton(
+                                      child: const Text('Ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                ));
+                      });
+                    }*/
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
@@ -134,7 +246,7 @@ class _EditarConfigEMPState extends State<EditarConfigEMP> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 20.0),
                   child: const Text(
-                    'Modificar Perfil',
+                    'Actualizar',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -144,15 +256,137 @@ class _EditarConfigEMPState extends State<EditarConfigEMP> {
         ));
   }
 
-  Widget _titulo() {
-    return const Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Text(
-        "Modificar Perfil",
-        style: TextStyle(
-            color: Colors.black, fontSize: 40.0, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-    );
+  void _opcioncamara(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Imagen de Galeria'),
+                    onTap: () {
+                      _camGaleria(false);
+                      Get.back();
+                      // Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Capturar Imagen'),
+                  onTap: () {
+                    _camGaleria(true);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  limpiar() {
+    controlcorreoelectronico.clear();
+    controlcontrasena.clear();
+    controlapellidos.clear();
+    controlnombres.clear();
+    controltelefono.clear();
+  }
+
+  registrarUserProfile(String uid) async {
+    print(_image);
+    var url = '';
+    if (_image != null) {
+      url = await cargarfoto(_image, uid);
+    }
+
+    try {
+      await firebase.collection('Usuarios').doc(uid).set({
+        "foto": url,
+        "nombres": controlnombres.text,
+        "tipousuario": '',
+        "correo": controlcorreoelectronico.text,
+        "contraseña": controlcontrasena.text,
+        "telefono": controltelefono.text,
+        "ciudad": valueChooseCiudades,
+        "cv": '',
+        "userid": uid
+      });
+    } catch (e) {
+      print('Error...' + e.toString());
+    }
+  }
+
+  static Future<dynamic> cargarfoto(var foto, var idUser) async {
+    final fs.Reference storageReference =
+        fs.FirebaseStorage.instance.ref().child("Usuarios");
+
+    fs.TaskSnapshot taskSnapshot =
+        await storageReference.child(idUser).putFile(foto);
+
+    var url = await taskSnapshot.ref.getDownloadURL();
+
+    return url.toString();
+  }
+
+  registrarUsuario(String tipousuario, String correo, String passwd) async {
+    bool encontrar = false;
+    try {
+      CollectionReference ref = FirebaseFirestore.instance.collection('Users');
+      QuerySnapshot usuario = await ref.get();
+
+      if (usuario.docs.length != 0) {
+        for (var cursor in usuario.docs) {
+          if (cursor.get('correo') == correo) {
+            encontrar = true;
+          }
+        }
+        if (encontrar == true) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('El usuario ya está registrado'),
+                    actions: <Widget>[
+                      MaterialButton(
+                        child: const Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      )
+                    ],
+                  ));
+        } else {
+          try {
+            String id = FirebaseFirestore.instance.collection('Users').doc().id;
+            print(id);
+            await firebase.collection('Users').doc(id).set({
+              "tipousuario": tipousuario,
+              "correo": correo,
+              "contraseña": passwd,
+              "id": id,
+            });
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text('Nuevo Usuario'),
+                      content: const Text('Usuario nuevo registrado'),
+                      actions: <Widget>[
+                        MaterialButton(
+                          child: const Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error...' + e.toString());
+            }
+          }
+        }
+      }
+    } catch (e) {}
   }
 }
