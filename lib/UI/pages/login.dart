@@ -33,50 +33,54 @@ class _LoginState extends State<Login> {
           backgroundColor: Colors.black,
         ),
         body: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const CircleAvatar(
-              radius: 70,
-              backgroundImage: NetworkImage(
-                  "https://thumbs.dreamstime.com/b/vector-graphic-initials-letter-js-logo-design-template-emblem-hexagon-204622912.jpg"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: _nombre(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _correoTextField(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _passwordTextField(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
-              child: _bottonlogin(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _bottonRegistrar(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 60, 20, 10),
-              child: _olvido(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const RecuperarPsswd()));
-                },
-                icon: const Icon(Icons.email),
-                iconSize: 40.0,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const CircleAvatar(
+                radius: 70,
+                backgroundImage: NetworkImage(
+                    "https://thumbs.dreamstime.com/b/vector-graphic-initials-letter-js-logo-design-template-emblem-hexagon-204622912.jpg"),
               ),
-            )
-          ]),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: _nombre(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _correoTextField(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _passwordTextField(),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
+                child: _bottonlogin(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _bottonRegistrar(),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 10),
+                child: _olvido(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const RecuperarPsswd()));
+                  },
+                  icon: const Icon(Icons.email),
+                  iconSize: 40.0,
+                ),
+              )
+            ]),
+          ),
         ),
       ),
     );
@@ -240,14 +244,8 @@ class _LoginState extends State<Login> {
 }
 
 Widget _bottonRegistrar() {
-  // ignore: prefer_const_constructors
   return StreamBuilder(builder: (BuildContext context, AsyncSnapshot snapshot) {
     return MaterialButton(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
-          child: const Text('Registrar',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -256,15 +254,20 @@ Widget _bottonRegistrar() {
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const AdicionarUsuario()));
-        });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
+          child: const Text('Registrar',
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+        ));
   });
 }
 
 Widget _nombre() {
   return const Text(
-    "Iniciar Sesión",
+    "JOB-SEEKER",
     style: const TextStyle(
-        color: Colors.black, fontSize: 50.0, fontWeight: FontWeight.bold),
+        color: Colors.black, fontSize: 40.0, fontWeight: FontWeight.bold),
     textAlign: TextAlign.center,
   );
 }

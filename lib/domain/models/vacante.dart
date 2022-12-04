@@ -9,6 +9,7 @@ class Vacante {
   final String salario;
   final String ciudad;
   final String estado;
+  final String fecha;
 
   Vacante({
     required this.iduser,
@@ -21,6 +22,7 @@ class Vacante {
     required this.salario,
     required this.ciudad,
     required this.estado,
+    required this.fecha,
   });
 
   factory Vacante.desdeDoc(Map<String, dynamic> data) {
@@ -35,6 +37,7 @@ class Vacante {
       salario: data['salario'] ?? '',
       ciudad: data['ciudad'] ?? '',
       estado: data['estado'] ?? '',
+      fecha: data['fecha'] ?? '',
     );
   }
 
@@ -49,5 +52,6 @@ class Vacante {
         "salario": salario,
         "ciudad": ciudad,
         "estado": estado,
+        "fecha": fecha,
       };
 }

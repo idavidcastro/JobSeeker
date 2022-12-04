@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -316,6 +317,10 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   }
 
   crearvacantes() async {
+    final DateTime now = DateTime.now();
+    final DateFormat formato = DateFormat('dd/MM/yyyy');
+    final String fecha = formato.format(now);
+    //print(formatted);
     try {
       await firebase
           .collection('Usuarios')
@@ -333,6 +338,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         "salario": controlSalario.text,
         "ciudad": valueChoose,
         "estado": valueChooseEstado,
+        "fecha": fecha
       });
       showDialog(
           context: context,

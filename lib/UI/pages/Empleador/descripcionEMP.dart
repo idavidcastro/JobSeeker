@@ -303,7 +303,7 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
           .doc(idvacante)
           .collection('Postulados')
           .doc(userid)
-          .set({
+          .update({
         "estado": estado,
       });
       await firebase
@@ -311,7 +311,7 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
           .doc(userid)
           .collection('Postulaciones')
           .doc(idvacante)
-          .set({
+          .update({
         "estado": estado,
       });
     } catch (e) {
