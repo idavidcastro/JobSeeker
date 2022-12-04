@@ -47,8 +47,16 @@ class _PageConfigState extends State<PageConfig> {
                             child: controladorusuarios
                                         .getUsuarios![posicion].foto !=
                                     ''
-                                ? Image.network(controladorusuarios
-                                    .getUsuarios![posicion].foto)
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(70),
+                                    child: Image.network(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].foto,
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
                                 : const Icon(Icons.person),
                           ),
                         ),

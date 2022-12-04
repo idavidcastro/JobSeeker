@@ -208,9 +208,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(20.0),
                   isExpanded: true,
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.black),
                   value: valueChoose,
                   icon: const Icon(Icons.location_city),
                   underline: Container(
@@ -232,9 +230,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(20.0),
                   isExpanded: true,
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.black),
                   value: valueChooseEstado,
                   icon: const Icon(Icons.check),
                   underline: Container(

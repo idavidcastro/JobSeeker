@@ -77,101 +77,94 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
       ),
 
       //otro widget otra pagina aqui abajo
-      Obx(
-        () => controladorpostulado.getPostulados?.isEmpty == false
-            ? ListView.builder(
-                itemCount: controladorpostulado.getPostulados?.isEmpty == true
-                    ? 0
-                    : controladorpostulado.getPostulados!.length,
-                itemBuilder: (context, posicion) {
-                  return ListTile(
-                    onLongPress: () {
-                      // _eliminarclientes(context, _clientes[0]);
-                    },
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      builder: (ctx) => bottondesplegable(
-                          ctx,
-                          controladorpostulado.getPostulados![posicion].foto,
-                          controladorpostulado.getPostulados![posicion].nombres,
-                          controladorpostulado.getPostulados![posicion].ciudad,
-                          controladorpostulado.getPostulados![posicion].correo,
-                          controladorpostulado
-                              .getPostulados![posicion].telefono,
-                          controladorpostulado.getPostulados![posicion].cv,
-                          controladorpostulado.getPostulados![posicion].estado,
-                          controladorpostulado.getPostulados![posicion].userid,
-                          widget.idvacante),
-                    ),
-                    leading: CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.black,
-                      child:
-                          controladorpostulado.getPostulados![posicion].foto !=
-                                  ''
-                              ? Image.network(controladorpostulado
-                                  .getPostulados![posicion].foto)
-                              : Text(
+      RefreshIndicator(
+        onRefresh: () {
+          setState(() {});
+          return Future<void>.delayed(const Duration(seconds: 2));
+        },
+        backgroundColor: Colors.black,
+        color: Colors.white,
+        strokeWidth: 3,
+        edgeOffset: 0,
+        child: Obx(
+          () => controladorpostulado.getPostulados?.isEmpty == false
+              ? ListView.builder(
+                  itemCount: controladorpostulado.getPostulados?.isEmpty == true
+                      ? 0
+                      : controladorpostulado.getPostulados!.length,
+                  itemBuilder: (context, posicion) {
+                    return ListTile(
+                      onLongPress: () {
+                        // _eliminarclientes(context, _clientes[0]);
+                      },
+                      onTap: () => showModalBottomSheet(
+                        context: context,
+                        builder: (ctx) => bottondesplegable(
+                            ctx,
+                            controladorpostulado.getPostulados![posicion].foto,
+                            controladorpostulado
+                                .getPostulados![posicion].nombres,
+                            controladorpostulado
+                                .getPostulados![posicion].ciudad,
+                            controladorpostulado
+                                .getPostulados![posicion].correo,
+                            controladorpostulado
+                                .getPostulados![posicion].telefono,
+                            controladorpostulado.getPostulados![posicion].cv,
+                            controladorpostulado
+                                .getPostulados![posicion].estado,
+                            controladorpostulado
+                                .getPostulados![posicion].userid,
+                            widget.idvacante),
+                      ),
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.black,
+                        child: controladorpostulado
+                                    .getPostulados![posicion].foto !=
+                                ''
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.network(
                                   controladorpostulado
-                                      .getPostulados![posicion].nombres
-                                      .substring(0, 1),
-                                  style: const TextStyle(color: Colors.white),
+                                      .getPostulados![posicion].foto,
+                                  width: 58,
+                                  height: 100,
+                                  fit: BoxFit.cover,
                                 ),
-                    ),
-                    title: Text(
-                        controladorpostulado.getPostulados![posicion].nombres),
-                    subtitle: Text(
-                        controladorpostulado.getPostulados![posicion].telefono),
-                    trailing: IconButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                    title: const Text('Llamar'),
-                                    content:
-                                        const Text('Llamar a este usuario?'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () async {
-                                            FlutterPhoneDirectCaller.callNumber(
-                                                controladorpostulado
-                                                    .getPostulados![posicion]
-                                                    .telefono);
-                                          },
-                                          child: const Text(
-                                            'Sí',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          )),
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text(
-                                            'Cancelar',
-                                            style: TextStyle(color: Colors.red),
-                                          ))
-                                    ],
-                                  ));
-                        },
-                        icon: const Icon(Icons.call)),
-                  );
-                })
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.error,
-                      size: 50,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('No se encontraron registros'),
-                    )
-                  ],
+                              )
+                            : const Icon(Icons.person),
+                      ),
+                      title: Text(controladorpostulado
+                          .getPostulados![posicion].nombres),
+                      subtitle: Text(controladorpostulado
+                          .getPostulados![posicion].telefono),
+                      trailing: IconButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            FlutterPhoneDirectCaller.callNumber(
+                                controladorpostulado
+                                    .getPostulados![posicion].telefono);
+                          },
+                          icon: const Icon(Icons.call)),
+                    );
+                  })
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.error,
+                        size: 50,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No se encontraron registros'),
+                      )
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     ];
     final _kTabs = <Tab>[
@@ -324,6 +317,7 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
                 onPressed: () {
                   actualizarEstado(
                       idvacante, userid, valueChooseEstados.toString());
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),

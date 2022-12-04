@@ -41,17 +41,26 @@ class _PageConfig2State extends State<PageConfig2> {
                     children: [
                       Column(children: [
                         Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: CircleAvatar(
-                              radius: 70,
-                              backgroundColor: Colors.black,
-                              child: controladorusuarios
-                                          .getUsuarios![posicion].foto !=
-                                      ''
-                                  ? Image.network(controladorusuarios
-                                      .getUsuarios![posicion].foto)
-                                  : const Icon(Icons.person),
-                            )),
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircleAvatar(
+                            radius: 70,
+                            backgroundColor: Colors.black,
+                            child: controladorusuarios
+                                        .getUsuarios![posicion].foto !=
+                                    ''
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(70),
+                                    child: Image.network(
+                                      controladorusuarios
+                                          .getUsuarios![posicion].foto,
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : const Icon(Icons.person),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(33.0),
                           child: Column(

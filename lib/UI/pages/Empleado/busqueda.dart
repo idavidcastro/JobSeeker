@@ -26,9 +26,13 @@ class _PageBusquedaState extends State<PageBusqueda> {
 
   String cargo = "";
 
+  Icon actionIcon = new Icon(Icons.search);
+  Widget appBarTitle = new Text('BUSQUEDA');
+
   @override
   Widget build(BuildContext context) {
     //TextEditingController cargo = TextEditingController();
+
     Controllerauthf controlf = Get.find();
     print("El id nueeuueue");
     print(controlf.uid);
@@ -37,9 +41,30 @@ class _PageBusquedaState extends State<PageBusqueda> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: actionIcon,
+              onPressed: () {
+                setState(() {
+                  if (actionIcon.icon == Icons.search) {
+                    actionIcon = const Icon(Icons.close);
+                    appBarTitle = const TextField(
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Ciudad, cargo o empresa',
+                          hintStyle: TextStyle(color: Colors.white),
+                        ));
+                  } else {
+                    actionIcon = const Icon(Icons.search);
+                    appBarTitle = const Text('BUSQUEDA');
+                  }
+                });
+              },
+            )
+          ],
           automaticallyImplyLeading: false,
           centerTitle: true,
-          title: const Text('BUSQUEDA'),
+          title: appBarTitle,
           backgroundColor: Colors.black,
         ),
         body: Obx(
