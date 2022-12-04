@@ -136,47 +136,59 @@ class _LoginState extends State<Login> {
       // ignore: sort_child_properties_last
       child: MaterialButton(
         onPressed: () {
-          controlf
-              .ingresarEmail(controllercorreo.text, controllercontrasena.text)
-              .then((value) {
-            if (controlf.emailf != 'Sin registro' &&
-                controlf.tiposuerREAL == 'Empleado') {
-              print(controlf.uid);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => Home(controllercorreo)));
-            } else if (controlf.emailf != 'Sin registro' &&
-                controlf.tiposuerREAL == 'Empleador') {
-              print(controlf.uid);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
-            } else {
-              Get.showSnackbar(const GetSnackBar(
-                title: 'Validación de usuarios',
-                message: 'ERROR! El usuario no existe en la base de datos',
-                icon: Icon(Icons.warning_amber_sharp),
-                duration: Duration(seconds: 4),
-                backgroundColor: Colors.red,
-              ));
-            }
-          }).catchError((onError) {
-            Get.showSnackbar(const GetSnackBar(
-              title: 'Validación de usuarios',
-              message: 'ERROR! El usuario no existe en la base de datos',
-              icon: Icon(Icons.warning_amber_sharp),
-              duration: Duration(seconds: 4),
-              backgroundColor: Colors.red,
-            ));
-          });
-          /*
           if (controllercorreo.text.isNotEmpty &&
               controllercontrasena.text.isNotEmpty) {
-            validarDatos();
+            controlf
+                .ingresarEmail(controllercorreo.text, controllercontrasena.text)
+                .then((value) {
+              if (controlf.emailf != 'Sin registro' &&
+                  controlf.tiposuerREAL == 'Empleado') {
+                print(controlf.uid);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => Home(controllercorreo)));
+              } else if (controlf.emailf != 'Sin registro' &&
+                  controlf.tiposuerREAL == 'Empleador') {
+                print(controlf.uid);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text('ERROR'),
+                          content: const Text('El usuario no existe'),
+                          actions: <Widget>[
+                            MaterialButton(
+                              child: const Text('Ok'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ));
+              }
+            }).catchError((onError) {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: const Text('ERROR'),
+                        content: const Text('El usuario no existe'),
+                        actions: <Widget>[
+                          MaterialButton(
+                            child: const Text('Ok'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      ));
+            });
           } else {
             showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                       title: const Text('Error'),
-                      content: const Text('Campos Vacíos'),
+                      content: const Text('Campos vacios'),
                       actions: <Widget>[
                         MaterialButton(
                           child: const Text('Ok'),
@@ -186,7 +198,7 @@ class _LoginState extends State<Login> {
                         )
                       ],
                     ));
-          }*/
+          }
         },
         child: const Text('Iniciar sesion',
             style: TextStyle(color: Colors.white, fontSize: 20)),

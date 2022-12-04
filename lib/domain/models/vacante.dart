@@ -1,7 +1,7 @@
 class Vacante {
   final String iduser;
   final String idvacante;
-  final String fechacreacion;
+  final String fecha;
   final String empresa;
   final String cargo;
   final String descripcion;
@@ -9,12 +9,11 @@ class Vacante {
   final String salario;
   final String ciudad;
   final String estado;
-  final String fecha;
 
   Vacante({
     required this.iduser,
     required this.idvacante,
-    required this.fechacreacion,
+    required this.fecha,
     required this.empresa,
     required this.cargo,
     required this.descripcion,
@@ -22,14 +21,13 @@ class Vacante {
     required this.salario,
     required this.ciudad,
     required this.estado,
-    required this.fecha,
   });
 
   factory Vacante.desdeDoc(Map<String, dynamic> data) {
     return Vacante(
       iduser: data['iduser'] ?? '',
       idvacante: data['idvacante'] ?? '',
-      fechacreacion: data['fechacreacion'] ?? '',
+      fecha: data['fecha'] ?? '',
       empresa: data['empresa'] ?? '',
       cargo: data['cargo'] ?? '',
       descripcion: data['descripcion'] ?? '',
@@ -37,14 +35,13 @@ class Vacante {
       salario: data['salario'] ?? '',
       ciudad: data['ciudad'] ?? '',
       estado: data['estado'] ?? '',
-      fecha: data['fecha'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() => {
         "iduser": iduser,
         "idvacante": idvacante,
-        "fechacreacion": fechacreacion,
+        "fecha": fecha,
         "empresa": empresa,
         "cargo": cargo,
         "descripcion": descripcion,
@@ -52,6 +49,5 @@ class Vacante {
         "salario": salario,
         "ciudad": ciudad,
         "estado": estado,
-        "fecha": fecha,
       };
 }

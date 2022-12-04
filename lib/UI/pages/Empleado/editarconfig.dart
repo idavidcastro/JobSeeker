@@ -27,7 +27,6 @@ class _EditarConfigState extends State<EditarConfig> {
 
   String? valueChooseCiudades = 'Valledupar';
   ImagePicker picker = ImagePicker();
-  var _image;
 
   TextEditingController controlnombres = TextEditingController();
   TextEditingController controlapellidos = TextEditingController();
@@ -38,6 +37,7 @@ class _EditarConfigState extends State<EditarConfig> {
   Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
   final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+  var _image;
 
   _camGaleria(bool op) async {
     XFile? image;

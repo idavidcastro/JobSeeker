@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/domain/models/postulacion.dart';
 import 'package:jobseeker/domain/models/vacante.dart';
 
 import '../../domain/controller/controladorAuth.dart';
@@ -99,6 +100,23 @@ class PeticionesVacanates {
       for (var doc in respuesta.docs) {
         log(doc.data().toString());
         lista.add(Vacante.desdeDoc(doc.data()));
+      }
+    });
+
+    return lista;
+  }
+
+  static Future<List<Postulacion>> consultaDatosPostulacion() async {
+    List<Postulacion> lista = [];
+    await _db
+        .collection("Usuarios")
+        .doc(controlf.uid)
+        .collection('Postulaciones')
+        .get()
+        .then((respuesta) {
+      for (var doc in respuesta.docs) {
+        log(doc.data().toString());
+        lista.add(Postulacion.desdeDoc(doc.data()));
       }
     });
 

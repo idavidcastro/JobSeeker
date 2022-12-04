@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/domain/controller/peticionfirebasePostulacion.dart';
 
+import '../../../domain/controller/controladorAuth.dart';
 import '../../../domain/controller/controllerfirebase.dart';
 import '../../../domain/models/vacante.dart';
 import 'descripcion.dart';
@@ -31,8 +34,42 @@ class _BienvenidaState extends State<Bienvenida> {
 
   @override
   Widget build(BuildContext context) {
-    ConsultasController controladorvacante = Get.find();
-    controladorvacante.consultaVacantesPostulaciones().then((value) => null);
+    ConsultasControllerPostulacion controladorpostulacion = Get.find();
+    controladorpostulacion.consultaDatosPostulacion().then((value) => null);
+    final firebase = FirebaseFirestore.instance;
+    Controllerauthf controlf = Get.find();
+
+    eliminarPostulacion(String idvacante, String iduser) async {
+      try {
+        //eliminar en Mis postulaciones
+        await firebase
+            .collection('Usuarios')
+            .doc(controlf.uid)
+            .collection('Postulaciones')
+            .doc(idvacante)
+            .delete()
+            .catchError((e) {});
+
+        //eliminar en postulados
+
+      } catch (e) {}
+    }
+
+    eliminarPostulado(String idvacante, String iduser) async {
+      try {
+        //eliminar en postulados
+
+        await firebase
+            .collection('Usuarios')
+            .doc(iduser)
+            .collection('Vacantes')
+            .doc(idvacante)
+            .collection('Postulados')
+            .doc(controlf.uid)
+            .delete()
+            .catchError((e) {});
+      } catch (e) {}
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -43,11 +80,12 @@ class _BienvenidaState extends State<Bienvenida> {
           backgroundColor: Colors.black,
         ),
         body: Obx(
-          () => controladorvacante.getVacantesGral?.isEmpty == false
+          () => controladorpostulacion.getPostulacion?.isEmpty == false
               ? ListView.builder(
-                  itemCount: controladorvacante.getVacantesGral?.isEmpty == true
-                      ? 0
-                      : controladorvacante.getVacantesGral!.length,
+                  itemCount:
+                      controladorpostulacion.getPostulacion?.isEmpty == true
+                          ? 0
+                          : controladorpostulacion.getPostulacion!.length,
                   itemBuilder: (context, posicion) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
@@ -72,7 +110,60 @@ class _BienvenidaState extends State<Bienvenida> {
                                 motion: const BehindMotion(),
                                 children: [
                                   SlidableAction(
-                                    onPressed: (context) {},
+                                    onPressed: (context) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                                title: const Text('Eliminar'),
+                                                content: const Text(
+                                                    'Dejar de postularse?'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        print(
+                                                            'el usuario creador es:');
+                                                        print(
+                                                            controladorpostulacion
+                                                                .getPostulacion![
+                                                                    posicion]
+                                                                .idusercreador);
+
+                                                        eliminarPostulacion(
+                                                            controladorpostulacion
+                                                                .getPostulacion![
+                                                                    posicion]
+                                                                .idvacante,
+                                                            controladorpostulacion
+                                                                .getPostulacion![
+                                                                    posicion]
+                                                                .idusercreador);
+                                                        eliminarPostulado(
+                                                            controladorpostulacion
+                                                                .getPostulacion![
+                                                                    posicion]
+                                                                .idvacante,
+                                                            controladorpostulacion
+                                                                .getPostulacion![
+                                                                    posicion]
+                                                                .idusercreador);
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text(
+                                                        'Sí',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      )),
+                                                  TextButton(
+                                                      onPressed: () {},
+                                                      child: const Text(
+                                                        'Cancelar',
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      ))
+                                                ],
+                                              ));
+                                    },
                                     backgroundColor: Colors.red,
                                     icon: Icons.delete,
                                     label: 'Eliminar',
@@ -91,16 +182,15 @@ class _BienvenidaState extends State<Bienvenida> {
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             15, 12, 15, 0),
-                                        child: Text(controladorvacante
-                                            .getVacantesGral![posicion]
-                                            .empresa),
+                                        child: Text(controladorpostulacion
+                                            .getPostulacion![posicion].empresa),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             15, 0, 15, 2),
                                         child: Text(
-                                            controladorvacante
-                                                .getVacantesGral![posicion]
+                                            controladorpostulacion
+                                                .getPostulacion![posicion]
                                                 .cargo,
                                             style: const TextStyle(
                                                 fontSize: 15.0,
@@ -109,9 +199,8 @@ class _BienvenidaState extends State<Bienvenida> {
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             15, 0, 15, 2),
-                                        child: Text(controladorvacante
-                                            .getVacantesGral![posicion]
-                                            .salario),
+                                        child: Text(controladorpostulacion
+                                            .getPostulacion![posicion].salario),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -122,8 +211,8 @@ class _BienvenidaState extends State<Bienvenida> {
                                               Icons.location_on,
                                               size: 15.0,
                                             ),
-                                            Text(controladorvacante
-                                                .getVacantesGral![posicion]
+                                            Text(controladorpostulacion
+                                                .getPostulacion![posicion]
                                                 .ciudad),
                                           ],
                                         ),
@@ -143,9 +232,8 @@ class _BienvenidaState extends State<Bienvenida> {
                                             ),
                                             Text(
                                               " " +
-                                                  controladorvacante
-                                                      .getVacantesGral![
-                                                          posicion]
+                                                  controladorpostulacion
+                                                      .getPostulacion![posicion]
                                                       .estado,
                                               style:
                                                   const TextStyle(fontSize: 13),
@@ -164,30 +252,31 @@ class _BienvenidaState extends State<Bienvenida> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => Descripcion(
-                                        controladorvacante
-                                            .getVacantesGral![posicion].iduser,
-                                        controladorvacante
-                                            .getVacantesGral![posicion]
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
+                                            .idusercreador,
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
                                             .idvacante,
-                                        controladorvacante
-                                            .getVacantesGral![posicion]
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
                                             .fechacreacion,
-                                        controladorvacante
-                                            .getVacantesGral![posicion].empresa,
-                                        controladorvacante
-                                            .getVacantesGral![posicion].cargo,
-                                        controladorvacante
-                                            .getVacantesGral![posicion]
+                                        controladorpostulacion
+                                            .getPostulacion![posicion].empresa,
+                                        controladorpostulacion
+                                            .getPostulacion![posicion].cargo,
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
                                             .descripcion,
-                                        controladorvacante
-                                            .getVacantesGral![posicion]
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
                                             .requisitos,
-                                        controladorvacante
-                                            .getVacantesGral![posicion].salario,
-                                        controladorvacante
-                                            .getVacantesGral![posicion].ciudad,
-                                        controladorvacante
-                                            .getVacantesGral![posicion]
+                                        controladorpostulacion
+                                            .getPostulacion![posicion].salario,
+                                        controladorpostulacion
+                                            .getPostulacion![posicion].ciudad,
+                                        controladorpostulacion
+                                            .getPostulacion![posicion]
                                             .estado)));
                           }),
                     );

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/controller/controladorAuth.dart';
@@ -103,17 +104,57 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
                           widget.idvacante),
                     ),
                     leading: CircleAvatar(
-                        backgroundColor: Colors.black,
-                        child: Text(
-                          controladorpostulado.getPostulados![posicion].nombres
-                              .substring(0, 1),
-                          style: const TextStyle(color: Colors.white),
-                        )),
+                      radius: 70,
+                      backgroundColor: Colors.black,
+                      child:
+                          controladorpostulado.getPostulados![posicion].foto !=
+                                  ''
+                              ? Image.network(controladorpostulado
+                                  .getPostulados![posicion].foto)
+                              : Text(
+                                  controladorpostulado
+                                      .getPostulados![posicion].nombres
+                                      .substring(0, 1),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                    ),
                     title: Text(
                         controladorpostulado.getPostulados![posicion].nombres),
                     subtitle: Text(
                         controladorpostulado.getPostulados![posicion].telefono),
-                    trailing: const Icon(Icons.call),
+                    trailing: IconButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    title: const Text('Llamar'),
+                                    content:
+                                        const Text('Llamar a este usuario?'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () async {
+                                            FlutterPhoneDirectCaller.callNumber(
+                                                controladorpostulado
+                                                    .getPostulados![posicion]
+                                                    .telefono);
+                                          },
+                                          child: const Text(
+                                            'Sí',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            'Cancelar',
+                                            style: TextStyle(color: Colors.red),
+                                          ))
+                                    ],
+                                  ));
+                        },
+                        icon: const Icon(Icons.call)),
                   );
                 })
             : Center(

@@ -37,39 +37,21 @@ class _PageConfig2State extends State<PageConfig2> {
                     ? 0
                     : controladorusuarios.getUsuarios!.length,
                 itemBuilder: (context, posicion) {
-                  var imagen;
                   return Column(
                     children: [
                       Column(children: [
                         Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: CircleAvatar(
-                            radius: 70,
-                            backgroundColor: Colors.black,
-                            child: imagen != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(48),
-                                    child: Image.file(
-                                      imagen,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(48),
-                                    ),
-                                    width: 100,
-                                    height: 100,
-                                    child: const Icon(
-                                      Icons.camera_alt_outlined,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                          ),
-                        ),
+                            padding: const EdgeInsets.all(20.0),
+                            child: CircleAvatar(
+                              radius: 70,
+                              backgroundColor: Colors.black,
+                              child: controladorusuarios
+                                          .getUsuarios![posicion].foto !=
+                                      ''
+                                  ? Image.network(controladorusuarios
+                                      .getUsuarios![posicion].foto)
+                                  : const Icon(Icons.person),
+                            )),
                         Padding(
                           padding: const EdgeInsets.all(33.0),
                           child: Column(

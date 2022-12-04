@@ -164,8 +164,7 @@ class _PageBusquedaState extends State<PageBusqueda> {
                                             .getVacantesGral![posicion]
                                             .idvacante,
                                         controladorvacante
-                                            .getVacantesGral![posicion]
-                                            .fechacreacion,
+                                            .getVacantesGral![posicion].fecha,
                                         controladorvacante
                                             .getVacantesGral![posicion].empresa,
                                         controladorvacante

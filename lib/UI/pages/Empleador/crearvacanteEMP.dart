@@ -35,7 +35,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
   String? valueChooseEstado = 'Activa';
 
   TextEditingController controlidvacante = TextEditingController();
-  TextEditingController controlfechacreacion = TextEditingController();
+  //TextEditingController controlfechacreacion = TextEditingController();
   TextEditingController controlCargo = TextEditingController();
   TextEditingController controlSalario = TextEditingController();
   TextEditingController controldescripcion = TextEditingController();
@@ -79,6 +79,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                       ),
                 ),
               ),
+              /*
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
@@ -98,7 +99,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                       //probar suffix
                       ),
                 ),
-              ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
                 child: TextField(
@@ -258,7 +259,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                   onPressed: () {
                     if (controlidvacante.text.isNotEmpty &&
                         controlempresa.text.isNotEmpty &&
-                        controlfechacreacion.text.isNotEmpty &&
                         controlCargo.text.isNotEmpty &&
                         controldescripcion.text.isNotEmpty &&
                         controlrequisitos.text.isNotEmpty &&
@@ -308,7 +308,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
 
   limpiar() {
     controlidvacante.clear();
-    controlfechacreacion.clear();
+    //controlfechacreacion.clear();
     controlCargo.clear();
     controldescripcion.clear();
     controlrequisitos.clear();
@@ -330,7 +330,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
           .set({
         "iduser": controlf.uid,
         "idvacante": controlidvacante.text,
-        "fechacreacion": controlfechacreacion.text,
+        "fechacreacion": fecha,
         "empresa": controlempresa.text,
         "cargo": controlCargo.text,
         "descripcion": controldescripcion.text,
@@ -338,7 +338,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
         "salario": controlSalario.text,
         "ciudad": valueChoose,
         "estado": valueChooseEstado,
-        "fecha": fecha
       });
       showDialog(
           context: context,

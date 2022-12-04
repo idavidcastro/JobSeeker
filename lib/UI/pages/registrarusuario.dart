@@ -275,6 +275,21 @@ class _AdicionarUsuarioState extends State<AdicionarUsuario> {
                                   ],
                                 ));
                       });
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: const Text('Error'),
+                                content: const Text('Campos vacios'),
+                                actions: <Widget>[
+                                  MaterialButton(
+                                    child: const Text('Ok'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ));
                     }
                   },
                   shape: RoundedRectangleBorder(

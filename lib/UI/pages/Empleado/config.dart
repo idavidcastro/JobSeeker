@@ -44,28 +44,12 @@ class _PageConfigState extends State<PageConfig> {
                           child: CircleAvatar(
                             radius: 70,
                             backgroundColor: Colors.black,
-                            child: imagen != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(48),
-                                    child: Image.file(
-                                      imagen,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(48),
-                                    ),
-                                    width: 100,
-                                    height: 100,
-                                    child: const Icon(
-                                      Icons.camera_alt_outlined,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            child: controladorusuarios
+                                        .getUsuarios![posicion].foto !=
+                                    ''
+                                ? Image.network(controladorusuarios
+                                    .getUsuarios![posicion].foto)
+                                : const Icon(Icons.person),
                           ),
                         ),
                         Padding(
