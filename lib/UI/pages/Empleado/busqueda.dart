@@ -38,6 +38,7 @@ class _PageBusquedaState extends State<PageBusqueda> {
     print(controlf.uid);
     ConsultasController controladorvacante = Get.find();
     controladorvacante.consultaVacantes().then((value) => null);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
