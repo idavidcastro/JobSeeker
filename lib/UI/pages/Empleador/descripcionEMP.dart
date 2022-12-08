@@ -50,7 +50,20 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
         .then((value) => null);
 
     final _paginas = <Widget>[
-      Center(
+      Container(
+        width: 0,
+        height: 0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.0),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(2.0, 2.0),
+              blurRadius: 8.0,
+            )
+          ],
+        ),
         child: Column(children: [
           const Padding(padding: EdgeInsets.all(20.0)),
           const Text('ID VACANTE ',
@@ -72,7 +85,7 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
           const Padding(padding: EdgeInsets.all(10.0)),
           const Text('CIUDAD ', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(widget.ciudad, style: const TextStyle(fontSize: 18.0)),
-          const Padding(padding: EdgeInsets.all(25.0)),
+          const Padding(padding: EdgeInsets.all(25.0))
         ]),
       ),
 

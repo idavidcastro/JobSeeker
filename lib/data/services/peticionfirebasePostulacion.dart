@@ -62,8 +62,8 @@ class PeticionesPostulacion {
         .get()
         .then((respuesta) {
       for (var doc in respuesta.docs) {
-        log(doc.data().toString());
-        lista.add(Postulacion.desdeDoc(doc.data()));
+        log(doc.data.toString());
+        lista.add(Postulacion.desdeDoc(doc.data));
       }
     });
 

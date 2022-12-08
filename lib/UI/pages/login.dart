@@ -96,7 +96,8 @@ class _LoginState extends State<Login> {
             keyboardType: TextInputType.emailAddress,
             controller: controllercorreo,
             decoration: const InputDecoration(
-              icon: Icon(
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(
                 Icons.person,
                 color: Colors.black,
               ),
@@ -119,7 +120,8 @@ class _LoginState extends State<Login> {
             obscureText: true,
             controller: controllercontrasena,
             decoration: const InputDecoration(
-              icon: Icon(
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(
                 Icons.lock,
                 color: Colors.black,
               ),
