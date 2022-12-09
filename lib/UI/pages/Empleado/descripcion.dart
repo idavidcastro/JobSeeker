@@ -194,48 +194,6 @@ class _DescripcionState extends State<Descripcion> {
                       )
                     ],
                   );
-
-                  /*
-                  Column(children: [
-                    const Padding(padding: EdgeInsets.all(20.0)),
-                    const Text('ID VACANTE ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Padding(padding: EdgeInsets.all(5.0)),
-                    Text(
-                      widget.idvacante,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    const Padding(padding: EdgeInsets.all(10.0)),
-                    const Text('EMPRESA ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.empresa,
-                        style: const TextStyle(fontSize: 18.0)),
-                    const Padding(padding: EdgeInsets.all(10.0)),
-                    const Text(' CARGO ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
-                    const Padding(padding: EdgeInsets.all(10.0)),
-                    const Text('SALARIO ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.salario,
-                        style: const TextStyle(fontSize: 18.0)),
-                    const Padding(padding: EdgeInsets.all(10.0)),
-                    const Text('CIUDAD ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.ciudad, style: TextStyle(fontSize: 18.0)),
-                    const Padding(padding: EdgeInsets.all(25.0)),
-                    _bottonPostularse(
-                        controladorusuario.getUsuarios![posicion].foto,
-                        controladorusuario.getUsuarios![posicion].nombres,
-                        controladorusuario.getUsuarios![posicion].tipousuario,
-                        controladorusuario.getUsuarios![posicion].correo,
-                        controladorusuario.getUsuarios![posicion].contrasena,
-                        controladorusuario.getUsuarios![posicion].telefono,
-                        controladorusuario.getUsuarios![posicion].ciudad,
-                        controladorusuario.getUsuarios![posicion].cv,
-                        controladorusuario.getUsuarios![posicion].userid,
-                        widget.idvacante)
-                  ]);*/
                 })
             : Center(
                 child: Column(

@@ -56,14 +56,14 @@ class _LoginState extends State<Login> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
-                child: _bottonlogin(),
+                child: _bottonNuevoLogin(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: _bottonRegistrar(),
+                child: _bottonNuevoRegistrar(),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 60, 20, 10),
+                padding: const EdgeInsets.all(10),
                 child: _olvido(),
               ),
               Padding(
@@ -132,28 +132,54 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Widget _bottonlogin() {
+  Widget _bottonNuevoLogin() {
     // ignore: prefer_const_constructors
-    return MaterialButton(
-      // ignore: sort_child_properties_last
-      child: MaterialButton(
-        onPressed: () {
-          if (controllercorreo.text.isNotEmpty &&
-              controllercontrasena.text.isNotEmpty) {
-            controlf
-                .ingresarEmail(controllercorreo.text, controllercontrasena.text)
-                .then((value) {
-              if (controlf.emailf != 'Sin registro' &&
-                  controlf.tiposuerREAL == 'Empleado') {
-                print(controlf.uid);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => Home(controllercorreo)));
-              } else if (controlf.emailf != 'Sin registro' &&
-                  controlf.tiposuerREAL == 'Empleador') {
-                print(controlf.uid);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => Home2(controllercorreo)));
-              } else {
+    return StreamBuilder(
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+      return MaterialButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 50.0,
+          color: Colors.black,
+          onPressed: () {
+            if (controllercorreo.text.isNotEmpty &&
+                controllercontrasena.text.isNotEmpty) {
+              controlf
+                  .ingresarEmail(
+                      controllercorreo.text, controllercontrasena.text)
+                  .then((value) {
+                if (controlf.emailf != 'Sin registro' &&
+                    controlf.tiposuerREAL == 'Empleado') {
+                  print(controlf.uid);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Home(controllercorreo)));
+                } else if (controlf.emailf != 'Sin registro' &&
+                    controlf.tiposuerREAL == 'Empleador') {
+                  print(controlf.uid);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Home2(controllercorreo)));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: const Text('ERROR'),
+                            content: const Text('El usuario no existe'),
+                            actions: <Widget>[
+                              MaterialButton(
+                                child: const Text('Ok'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          ));
+                }
+              }).catchError((onError) {
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -168,13 +194,13 @@ class _LoginState extends State<Login> {
                             )
                           ],
                         ));
-              }
-            }).catchError((onError) {
+              });
+            } else {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        title: const Text('ERROR'),
-                        content: const Text('El usuario no existe'),
+                        title: const Text('Error'),
+                        content: const Text('Campos vacios'),
                         actions: <Widget>[
                           MaterialButton(
                             child: const Text('Ok'),
@@ -184,35 +210,15 @@ class _LoginState extends State<Login> {
                           )
                         ],
                       ));
-            });
-          } else {
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                      title: const Text('Error'),
-                      content: const Text('Campos vacios'),
-                      actions: <Widget>[
-                        MaterialButton(
-                          child: const Text('Ok'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    ));
-          }
-        },
-        child: const Text('Iniciar sesion',
-            style: TextStyle(color: Colors.white, fontSize: 20)),
-        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 50.0,
-      color: Colors.black,
-      onPressed: () {},
-    );
+            }
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+            child: const Text('Iniciar Sesión',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
+          ));
+    });
   }
 
   validarDatos() async {
@@ -257,7 +263,8 @@ class _LoginState extends State<Login> {
   }
 }
 
-Widget _bottonRegistrar() {
+Widget _bottonNuevoRegistrar() {
+  // ignore: prefer_const_constructors
   return StreamBuilder(builder: (BuildContext context, AsyncSnapshot snapshot) {
     return MaterialButton(
         shape: RoundedRectangleBorder(
@@ -270,9 +277,9 @@ Widget _bottonRegistrar() {
               MaterialPageRoute(builder: (_) => const AdicionarUsuario()));
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           child: const Text('Registrar',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
+              style: TextStyle(color: Colors.white, fontSize: 18)),
         ));
   });
 }

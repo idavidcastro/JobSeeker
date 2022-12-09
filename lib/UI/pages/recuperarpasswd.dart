@@ -1,3 +1,6 @@
+import 'package:basic_utils/basic_utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
@@ -11,6 +14,13 @@ class RecuperarPsswd extends StatefulWidget {
 
 class _RecuperarPsswdState extends State<RecuperarPsswd> {
   TextEditingController controllercorreo = TextEditingController();
+  final firebase = FirebaseFirestore.instance;
+
+  @override
+  void dispose() {
+    controllercorreo.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,42 +37,49 @@ class _RecuperarPsswdState extends State<RecuperarPsswd> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 50, 20, 0),
-              child: TextField(
-                //controller: controllercorreo,
-                decoration: InputDecoration(
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  ),
-                ),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextField(
+                    cursorColor: Colors.black,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: controllercorreo,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.black,
+                      ),
+                      labelText: 'Correo electrónico',
+                    ),
+                    onChanged: (value) {}),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(0),
               child: IconButton(
                   iconSize: 50,
                   onPressed: () {
+                    resetPsswd();
+
                     showDialog(
                         context: context,
-                        builder: (_) => AlertDialog(
-                              title: const Text('Recuperar contraseña'),
+                        builder: (context) => AlertDialog(
+                              title: const Text('Reestablecer contraseña'),
                               content: const Text(
-                                  'Se envió una nueva contraseña a su correo.'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => const Login()));
-                                    },
-                                    child: const Text(
-                                      'Ok',
-                                      style: TextStyle(color: Colors.black),
-                                    ))
+                                  'Se envió un enlace para reestablecer su contraseña'),
+                              actions: <Widget>[
+                                MaterialButton(
+                                  child: const Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => const Login()),
+                                    );
+                                  },
+                                )
                               ],
                             ));
                     // Devuelvo los datos de la lista _usuarioadd
@@ -79,5 +96,22 @@ class _RecuperarPsswdState extends State<RecuperarPsswd> {
         ),
       )),
     );
+  }
+
+  resetPsswd() async {
+    print(controllercorreo.text);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: controllercorreo.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
   }
 }

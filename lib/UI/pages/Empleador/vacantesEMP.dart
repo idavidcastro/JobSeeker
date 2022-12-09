@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:jobseeker/UI/pages/Empleador/descripcionEMP.dart';
 import 'package:jobseeker/UI/pages/login.dart';
 
+import '../../../domain/controller/controladorAuth.dart';
 import '../../../domain/controller/controllerfirebase.dart';
 import '../../../domain/models/vacante.dart';
 import '../Empleado/descripcion.dart';
@@ -19,6 +22,21 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
   //final List _vacantes = listaVacantes;
   late bool _value = false;
   late bool _value2 = false;
+  final firebase = FirebaseFirestore.instance;
+  Controllerauthf controlf = Get.find();
+
+  eliminarVacanteGral(String idvacante) async {
+    try {
+      //eliminar en  vacantes
+      await firebase
+          .collection('Usuarios')
+          .doc(controlf.uid)
+          .collection('Vacantes')
+          .doc(idvacante)
+          .delete()
+          .catchError((e) {});
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,47 +118,105 @@ class _ListaPrincipalEmpreadorState extends State<ListaPrincipalEmpreador> {
                                 ],
                                 //border: Border.all(color: Colors.black, width: 6.0)
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 12, 15, 0),
-                                    child: Text(controladorvacante
-                                        .getVacantesGral![posicion].empresa),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 0, 15, 2),
-                                    child: Text(
-                                        controladorvacante
-                                            .getVacantesGral![posicion].cargo,
-                                        style: const TextStyle(
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 0, 15, 2),
-                                    child: Text(controladorvacante
-                                        .getVacantesGral![posicion].salario),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 0, 15, 12),
-                                    child: Row(
+                              child: Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const BehindMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      borderRadius: BorderRadius.circular(10),
+                                      onPressed: (context) {
+                                        eliminarVacanteGral(controladorvacante
+                                            .getVacantesGral![posicion]
+                                            .idvacante);
+
+                                        setState(() {});
+                                      },
+                                      backgroundColor: Colors.red,
+                                      icon: Icons.delete,
+                                      label: 'Eliminar',
+                                    )
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        const Icon(
-                                          Icons.location_on,
-                                          size: 15.0,
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 12, 15, 0),
+                                          child: Text(controladorvacante
+                                              .getVacantesGral![posicion]
+                                              .empresa),
                                         ),
-                                        Text(controladorvacante
-                                            .getVacantesGral![posicion].ciudad),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 2),
+                                          child: Text(
+                                              controladorvacante
+                                                  .getVacantesGral![posicion]
+                                                  .cargo,
+                                              style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 2),
+                                          child: Text(controladorvacante
+                                              .getVacantesGral![posicion]
+                                              .salario),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 12),
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.location_on,
+                                                size: 15.0,
+                                              ),
+                                              Text(controladorvacante
+                                                  .getVacantesGral![posicion]
+                                                  .ciudad),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.check_circle,
+                                                size: 12,
+                                              ),
+                                              Text(
+                                                " " +
+                                                    controladorvacante
+                                                        .getVacantesGral![
+                                                            posicion]
+                                                        .fecha,
+                                                style: const TextStyle(
+                                                    fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             onTap: () {

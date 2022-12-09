@@ -43,6 +43,7 @@ dependencies:
   firebase_storage:
   flutter_slidable: ^2.0.0
   flutter_phone_direct_caller: ^2.1.1
+  basic_utils: ^5.4.2
 
 dev_dependencies:
   flutter_test:
