@@ -65,8 +65,10 @@ class PeticionesPostulados {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Postulado.desdeDoc(doc.data));
+        lista.add(Postulado.desdeDoc(doc.data()));
       }
+      print('numero de docuemntos');
+      print(respuesta.docs.length);
     });
 
     return lista;

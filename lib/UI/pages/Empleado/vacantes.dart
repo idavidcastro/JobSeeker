@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/UI/pages/Empleado/descripcionPOST.dart';
 import 'package:jobseeker/domain/controller/peticionfirebasePostulacion.dart';
 
 import '../../../domain/controller/controladorAuth.dart';
@@ -11,12 +12,11 @@ import 'descripcion.dart';
 import '../Empleador/descripcionEMP.dart';
 
 class Bienvenida extends StatefulWidget {
-  final TextEditingController correo;
+  //final TextEditingController correo;
   //final Function currentIndex;
   static String id = 'Bienvenida';
 
-  const Bienvenida(
-    this.correo, {
+  const Bienvenida({
     Key? key,
   }) : super(key: key);
 
@@ -71,231 +71,212 @@ class _BienvenidaState extends State<Bienvenida> {
       } catch (e) {}
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: const Text('MIS POSTULACIONES'),
-          backgroundColor: Colors.black,
-        ),
-        body: Obx(
-          () => controladorpostulacion.getPostulacion?.isEmpty == false
-              ? ListView.builder(
-                  itemCount:
-                      controladorpostulacion.getPostulacion?.isEmpty == true
-                          ? 0
-                          : controladorpostulacion.getPostulacion!.length,
-                  itemBuilder: (context, posicion) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                      child: InkWell(
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                              boxShadow: const <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(2.0, 2.0),
-                                  blurRadius: 8.0,
-                                )
-                              ],
-                              //border: Border.all(color: Colors.black, width: 6.0)
-                            ),
-                            child: Slidable(
-                              endActionPane: ActionPane(
-                                motion: const BehindMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                                title: const Text('Eliminar'),
-                                                content: const Text(
-                                                    'Dejar de postularse?'),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        print(
-                                                            'el usuario creador es:');
-                                                        print(
-                                                            controladorpostulacion
-                                                                .getPostulacion![
-                                                                    posicion]
-                                                                .idusercreador);
-
-                                                        eliminarPostulacion(
-                                                            controladorpostulacion
-                                                                .getPostulacion![
-                                                                    posicion]
-                                                                .idvacante,
-                                                            controladorpostulacion
-                                                                .getPostulacion![
-                                                                    posicion]
-                                                                .idusercreador);
-                                                        eliminarPostulado(
-                                                            controladorpostulacion
-                                                                .getPostulacion![
-                                                                    posicion]
-                                                                .idvacante,
-                                                            controladorpostulacion
-                                                                .getPostulacion![
-                                                                    posicion]
-                                                                .idusercreador);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                        'Sí',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
-                                                      )),
-                                                  TextButton(
-                                                      onPressed: () {},
-                                                      child: const Text(
-                                                        'Cancelar',
-                                                        style: TextStyle(
-                                                            color: Colors.red),
-                                                      ))
-                                                ],
-                                              ));
-                                    },
-                                    backgroundColor: Colors.red,
-                                    icon: Icons.delete,
-                                    label: 'Eliminar',
+    return RefreshIndicator(
+      backgroundColor: Colors.black,
+      color: Colors.white,
+      strokeWidth: 3,
+      edgeOffset: 0,
+      onRefresh: () {
+        setState(() {});
+        return Future<void>.delayed(const Duration(seconds: 2));
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: const Text('MIS POSTULACIONES'),
+            backgroundColor: Colors.black,
+          ),
+          body: Obx(
+            () => controladorpostulacion.getPostulacion?.isEmpty == false
+                ? ListView.builder(
+                    itemCount:
+                        controladorpostulacion.getPostulacion?.isEmpty == true
+                            ? 0
+                            : controladorpostulacion.getPostulacion!.length,
+                    itemBuilder: (context, posicion) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+                        child: InkWell(
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: const <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    offset: Offset(2.0, 2.0),
+                                    blurRadius: 8.0,
                                   )
                                 ],
+                                //border: Border.all(color: Colors.black, width: 6.0)
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 12, 15, 0),
-                                        child: Text(controladorpostulacion
-                                            .getPostulacion![posicion].empresa),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 0, 15, 2),
-                                        child: Text(
+                              child: Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const BehindMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      borderRadius: BorderRadius.circular(10),
+                                      onPressed: (context) {
+                                        eliminarPostulacion(
                                             controladorpostulacion
                                                 .getPostulacion![posicion]
-                                                .cargo,
-                                            style: const TextStyle(
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 0, 15, 2),
-                                        child: Text(controladorpostulacion
-                                            .getPostulacion![posicion].salario),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15, 0, 15, 12),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.location_on,
-                                              size: 15.0,
-                                            ),
-                                            Text(controladorpostulacion
+                                                .idvacante,
+                                            controladorpostulacion
                                                 .getPostulacion![posicion]
-                                                .ciudad),
-                                          ],
+                                                .idusercreador);
+                                        eliminarPostulado(
+                                            controladorpostulacion
+                                                .getPostulacion![posicion]
+                                                .idvacante,
+                                            controladorpostulacion
+                                                .getPostulacion![posicion]
+                                                .idusercreador);
+
+                                        setState(() {});
+                                      },
+                                      backgroundColor: Colors.red,
+                                      icon: Icons.delete,
+                                      label: 'Eliminar',
+                                    )
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 12, 15, 0),
+                                          child: Text(controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .empresa),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.check_circle,
-                                              size: 12,
-                                            ),
-                                            Text(
-                                              " " +
-                                                  controladorpostulacion
-                                                      .getPostulacion![posicion]
-                                                      .estado,
-                                              style:
-                                                  const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 2),
+                                          child: Text(
+                                              controladorpostulacion
+                                                  .getPostulacion![posicion]
+                                                  .cargo,
+                                              style: const TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold)),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 2),
+                                          child: Text(controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .salario),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 15, 12),
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.location_on,
+                                                size: 15.0,
+                                              ),
+                                              Text(controladorpostulacion
+                                                  .getPostulacion![posicion]
+                                                  .ciudad),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.check_circle,
+                                                size: 12,
+                                              ),
+                                              Text(
+                                                " " +
+                                                    controladorpostulacion
+                                                        .getPostulacion![
+                                                            posicion]
+                                                        .estado,
+                                                style: const TextStyle(
+                                                    fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => Descripcion(
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .idusercreador,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .idvacante,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .fechacreacion,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion].empresa,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion].cargo,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .descripcion,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .requisitos,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion].salario,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion].ciudad,
-                                        controladorpostulacion
-                                            .getPostulacion![posicion]
-                                            .estado)));
-                          }),
-                    );
-                  })
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.error,
-                        size: 50,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('No se encontraron registros'),
-                      )
-                    ],
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => DescripcionPOST(
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .idusercreador,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .idvacante,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .fechacreacion,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .empresa,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion].cargo,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .descripcion,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .requisitos,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .salario,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion].ciudad,
+                                          controladorpostulacion
+                                              .getPostulacion![posicion]
+                                              .estado)));
+                            }),
+                      );
+                    })
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.error,
+                          size: 50,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('No se encontraron registros'),
+                        )
+                      ],
+                    ),
                   ),
-                ),
+          ),
         ),
       ),
     );

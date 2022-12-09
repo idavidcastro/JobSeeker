@@ -18,7 +18,6 @@ class AdicionarVacantes extends StatefulWidget {
 }
 
 class _AdicionarVacantesState extends State<AdicionarVacantes> {
-  List<Vacante> _vacanteAdd = [];
   List<String> list = [
     'Valledupar',
     'Barranquilla ',
@@ -56,151 +55,219 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
           title: const Text('NUEVA VACANTE'),
           automaticallyImplyLeading: false,
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: const Icon(Icons.add),
+            onPressed: () {
+              if (controlidvacante.text.isNotEmpty &&
+                  controlempresa.text.isNotEmpty &&
+                  controlCargo.text.isNotEmpty &&
+                  controldescripcion.text.isNotEmpty &&
+                  controlrequisitos.text.isNotEmpty &&
+                  controlSalario.text.isNotEmpty) {
+                crearvacantes();
+                limpiar();
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: const Text('Campos vacíos'),
+                          content: const Text('Complete los campos vacíos'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {});
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Ok',
+                                  style: TextStyle(color: Colors.black),
+                                ))
+                          ],
+                        ));
+              }
+            }),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controlidvacante,
-                  decoration: InputDecoration(
-                      filled: true,
-                      //hintText: 'Tipo Usuario',
-                      labelText: 'Id Vacante',
-                      icon: const Icon(Icons.date_range),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlidvacante.clear();
-                        },
-                      )
-                      //probar suffix
+                padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      /////AQUI
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controlidvacante,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.vpn_key,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controlidvacante.clear();
+                          },
+                        ),
+                        labelText: 'ID Vacante',
                       ),
-                ),
-              ),
-              /*
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controlfechacreacion,
-                  decoration: InputDecoration(
-                      filled: true,
-                      //hintText: 'Tipo Usuario',
-                      labelText: 'Fecha de creación',
-                      icon: const Icon(Icons.date_range),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlfechacreacion.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
-                ),
-              ),*/
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controlempresa,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Empresa',
-                      icon: const Icon(Icons.description),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlempresa.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
+                      onChanged: (value) {}),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controlCargo,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Cargo',
-                      icon: const Icon(Icons.business_center),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlCargo.clear();
-                        },
-                      )
-                      //probar suffix
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      /////AQUI
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controlempresa,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.business,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controlempresa.clear();
+                          },
+                        ),
+                        labelText: 'Empresa',
                       ),
+                      onChanged: (value) {}),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controldescripcion,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Descripción',
-                      icon: const Icon(Icons.description),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controldescripcion.clear();
-                        },
-                      )
-                      //probar suffix
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      /////AQUI
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controlCargo,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.assignment_ind,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controlCargo.clear();
+                          },
+                        ),
+                        labelText: 'Cargo',
                       ),
+                      onChanged: (value) {}),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextFormField(
-                  controller: controlrequisitos,
-                  decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(35)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(35)),
-                      prefixIcon: const Icon(
-                        Icons.content_paste,
-                        color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      maxLines: 3,
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controldescripcion,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.description,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controldescripcion.clear();
+                          },
+                        ),
+                        labelText: 'Descripción',
                       ),
-                      filled: true,
-                      labelText: 'Requisitos',
-                      labelStyle: TextStyle(color: Colors.black),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlrequisitos.clear();
-                        },
-                      )),
+                      onChanged: (value) {}),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: TextField(
-                  controller: controlSalario,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Salario mensual',
-                      icon: const Icon(Icons.attach_money),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlSalario.clear();
-                        },
-                      )
-                      //probar suffix
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      maxLines: 3,
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controlrequisitos,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.content_paste,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controlrequisitos.clear();
+                          },
+                        ),
+                        labelText: 'Requisitos',
                       ),
+                      onChanged: (value) {}),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  child: TextFormField(
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: controlSalario,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
+                          Icons.attach_money,
+                          color: Colors.black,
+                        ),
+                        suffix: GestureDetector(
+                          child: const Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Icon(Icons.close),
+                          ),
+                          onTap: () {
+                            controlSalario.clear();
+                          },
+                        ),
+                        labelText: 'Salario',
+                      ),
+                      onChanged: (value) {}),
                 ),
               ),
               Padding(
@@ -208,7 +275,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(20.0),
                   isExpanded: true,
-                  style: TextStyle(fontSize: 15, color: Colors.black),
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
                   value: valueChoose,
                   icon: const Icon(Icons.location_city),
                   underline: Container(
@@ -230,7 +297,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                 child: DropdownButton(
                   borderRadius: BorderRadius.circular(20.0),
                   isExpanded: true,
-                  style: TextStyle(fontSize: 15, color: Colors.black),
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
                   value: valueChooseEstado,
                   icon: const Icon(Icons.check),
                   underline: Container(
@@ -248,6 +315,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                   }).toList(),
                 ),
               ),
+              /*
               Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: MaterialButton(
@@ -296,7 +364,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ));
@@ -326,7 +394,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
           .set({
         "iduser": controlf.uid,
         "idvacante": controlidvacante.text,
-        "fechacreacion": fecha,
+        "fecha": fecha,
         "empresa": controlempresa.text,
         "cargo": controlCargo.text,
         "descripcion": controldescripcion.text,

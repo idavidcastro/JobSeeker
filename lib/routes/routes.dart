@@ -11,9 +11,9 @@ class Routes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> myList = [
-      PageBusqueda(correo),
-      Bienvenida(correo),
-      PageConfig(correo)
+      const PageBusqueda(),
+      const Bienvenida(),
+      const PageConfig()
     ];
     return myList[index];
   }

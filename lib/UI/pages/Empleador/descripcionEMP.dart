@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/UI/pages/Empleador/editarvacante.dart';
 
 import '../../../domain/controller/controladorAuth.dart';
 import '../../../domain/controller/controllerfirebasePostulados.dart';
@@ -64,29 +65,56 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
             )
           ],
         ),
-        child: Column(children: [
-          const Padding(padding: EdgeInsets.all(20.0)),
-          const Text('ID VACANTE ',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const Padding(padding: EdgeInsets.all(5.0)),
-          Text(
-            widget.idvacante,
-            style: const TextStyle(fontSize: 18.0),
+        child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditarVacante(
+                            widget.iduser,
+                            widget.idvacante,
+                            widget.fechacreacion,
+                            widget.empresa,
+                            widget.cargo,
+                            widget.descripcion,
+                            widget.requisitos,
+                            widget.salario,
+                            widget.ciudad,
+                            widget.estado,
+                          )));
+            },
+            child: const Icon(Icons.edit),
           ),
-          const Padding(padding: EdgeInsets.all(10.0)),
-          const Text('EMPRESA ', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.empresa, style: const TextStyle(fontSize: 18.0)),
-          const Padding(padding: EdgeInsets.all(10.0)),
-          const Text(' CARGO ', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
-          const Padding(padding: EdgeInsets.all(10.0)),
-          const Text('SALARIO ', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.salario, style: const TextStyle(fontSize: 18.0)),
-          const Padding(padding: EdgeInsets.all(10.0)),
-          const Text('CIUDAD ', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(widget.ciudad, style: const TextStyle(fontSize: 18.0)),
-          const Padding(padding: EdgeInsets.all(25.0))
-        ]),
+          body: Column(children: [
+            const Padding(padding: EdgeInsets.all(20.0)),
+            const Text('ID VACANTE ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            const Padding(padding: EdgeInsets.all(5.0)),
+            Text(
+              widget.idvacante,
+              style: const TextStyle(fontSize: 18.0),
+            ),
+            const Padding(padding: EdgeInsets.all(10.0)),
+            const Text('EMPRESA ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(widget.empresa, style: const TextStyle(fontSize: 18.0)),
+            const Padding(padding: EdgeInsets.all(10.0)),
+            const Text(' CARGO ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
+            const Padding(padding: EdgeInsets.all(10.0)),
+            const Text('SALARIO ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(widget.salario, style: const TextStyle(fontSize: 18.0)),
+            const Padding(padding: EdgeInsets.all(10.0)),
+            const Text('CIUDAD ',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(widget.ciudad, style: const TextStyle(fontSize: 18.0)),
+            const Padding(padding: EdgeInsets.all(25.0))
+          ]),
+        ),
       ),
 
       //otro widget otra pagina aqui abajo
@@ -107,9 +135,6 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
                       : controladorpostulado.getPostulados!.length,
                   itemBuilder: (context, posicion) {
                     return ListTile(
-                      onLongPress: () {
-                        // _eliminarclientes(context, _clientes[0]);
-                      },
                       onTap: () => showModalBottomSheet(
                         context: context,
                         builder: (ctx) => bottondesplegable(

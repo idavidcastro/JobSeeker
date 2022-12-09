@@ -63,7 +63,7 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Vacante.desdeDoc(doc.data));
+        lista.add(Vacante.desdeDoc(doc.data()));
       }
     });
 
@@ -82,7 +82,7 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Vacante.desdeDoc(doc.data));
+        lista.add(Vacante.desdeDoc(doc.data()));
       }
     });
 
@@ -99,7 +99,7 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Vacante.desdeDoc(doc.data));
+        lista.add(Vacante.desdeDoc(doc.data()));
       }
     });
 
@@ -116,7 +116,7 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Postulacion.desdeDoc(doc.data));
+        lista.add(Postulacion.desdeDoc(doc.data()));
       }
     });
 
@@ -128,7 +128,7 @@ class PeticionesVacanates {
     await _db.collectionGroup("Vacantes").get().then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Vacante.desdeDoc(doc.data));
+        lista.add(Vacante.desdeDoc(doc.data()));
       }
     });
 
@@ -144,7 +144,7 @@ class PeticionesVacanates {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Vacante.desdeDoc(doc.data));
+        lista.add(Vacante.desdeDoc(doc.data()));
       }
     });
     //print(lista);

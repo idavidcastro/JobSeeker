@@ -63,7 +63,7 @@ class PeticionesPostulacion {
         .then((respuesta) {
       for (var doc in respuesta.docs) {
         log(doc.data.toString());
-        lista.add(Postulacion.desdeDoc(doc.data));
+        lista.add(Postulacion.desdeDoc(doc.data()));
       }
     });
 

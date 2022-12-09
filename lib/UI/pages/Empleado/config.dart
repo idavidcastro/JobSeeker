@@ -6,8 +6,8 @@ import '../../../domain/controller/controladorAuth.dart';
 import '../login.dart';
 
 class PageConfig extends StatefulWidget {
-  final TextEditingController correo;
-  const PageConfig(this.correo, {Key? key}) : super(key: key);
+  //final TextEditingController correo;
+  const PageConfig({Key? key}) : super(key: key);
 
   @override
   State<PageConfig> createState() => _PageConfigState();

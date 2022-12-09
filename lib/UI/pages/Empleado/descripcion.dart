@@ -143,8 +143,6 @@ class _DescripcionState extends State<Descripcion> {
           elevation: 50.0,
           color: Colors.black,
           onPressed: () {
-            print('booleano postulaciones antes xd');
-            print(booleanoPostulaciones);
             crearPostulacion(foto, nombres, tipousuario, correo, contrasena,
                 telefono, ciudad, cv, userid, idvacante);
           });

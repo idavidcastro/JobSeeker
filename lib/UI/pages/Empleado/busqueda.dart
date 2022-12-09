@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jobseeker/domain/controller/controllerfirebasePostulados.dart';
 import '../../../domain/controller/controladorAuth.dart';
 import '../../../domain/controller/controllerfirebase.dart';
 import '../../../domain/models/vacante.dart';
@@ -9,8 +11,8 @@ import 'descripcion.dart';
 import '../Empleador/descripcionEMP.dart';
 
 class PageBusqueda extends StatefulWidget {
-  final TextEditingController correo;
-  const PageBusqueda(this.correo, {Key? key}) : super(key: key);
+  //final TextEditingController correo;
+  const PageBusqueda({Key? key}) : super(key: key);
 
   @override
   State<PageBusqueda> createState() => _PageBusquedaState();
@@ -150,28 +152,17 @@ class _PageBusquedaState extends State<PageBusqueda> {
                                       Text(
                                           controladorvacante
                                               .getVacantesGral![posicion].fecha,
-                                          style: const TextStyle(fontSize: 12)),
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black)),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 0, 0, 12),
-                                        child: MaterialButton(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                            ),
-                                            elevation: 50,
-                                            color: Colors.black,
-                                            onPressed: () {},
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 17,
-                                                      vertical: 5),
-                                              child: const Text('Postularse',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12)),
-                                            )),
+                                        child: Row(
+                                          children: const [
+                                            Text('Ver mas...'),
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ),
