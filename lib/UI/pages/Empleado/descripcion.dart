@@ -56,7 +56,147 @@ class _DescripcionState extends State<Descripcion> {
                     ? 0
                     : controladorusuario.getUsuarios!.length,
                 itemBuilder: (context, posicion) {
-                  return Column(children: [
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(40),
+                        child: Container(
+                          width: 500,
+                          height: 500,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: const <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.black,
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 8.0,
+                              )
+                            ],
+                            //border: Border.all(color: Colors.black, width: 6.0)
+                          ),
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        const Text('Empresa: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.empresa,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Column(
+                                      children: [
+                                        const Text('Cargo: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.cargo,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Column(
+                                      children: [
+                                        const Text('Descripción: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.descripcion,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Column(
+                                      children: [
+                                        const Text('Requisitos: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.requisitos,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Column(
+                                      children: [
+                                        const Text('Salario: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.salario,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Column(
+                                      children: [
+                                        const Text('Ciudad: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(widget.ciudad,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                  ]),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: _bottonPostularse(
+                            controladorusuario.getUsuarios![posicion].foto,
+                            controladorusuario.getUsuarios![posicion].nombres,
+                            controladorusuario
+                                .getUsuarios![posicion].tipousuario,
+                            controladorusuario.getUsuarios![posicion].correo,
+                            controladorusuario
+                                .getUsuarios![posicion].contrasena,
+                            controladorusuario.getUsuarios![posicion].telefono,
+                            controladorusuario.getUsuarios![posicion].ciudad,
+                            controladorusuario.getUsuarios![posicion].cv,
+                            controladorusuario.getUsuarios![posicion].userid,
+                            widget.idvacante),
+                      )
+                    ],
+                  );
+
+                  /*
+                  Column(children: [
                     const Padding(padding: EdgeInsets.all(20.0)),
                     const Text('ID VACANTE ',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -95,7 +235,7 @@ class _DescripcionState extends State<Descripcion> {
                         controladorusuario.getUsuarios![posicion].cv,
                         controladorusuario.getUsuarios![posicion].userid,
                         widget.idvacante)
-                  ]);
+                  ]);*/
                 })
             : Center(
                 child: Column(
@@ -131,12 +271,6 @@ class _DescripcionState extends State<Descripcion> {
     return StreamBuilder(
         builder: (BuildContext context, AsyncSnapshot snapshot) {
       return MaterialButton(
-          child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
-            child: const Text('Postularse',
-                style: TextStyle(color: Colors.white, fontSize: 14)),
-          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -145,7 +279,13 @@ class _DescripcionState extends State<Descripcion> {
           onPressed: () {
             crearPostulacion(foto, nombres, tipousuario, correo, contrasena,
                 telefono, ciudad, cv, userid, idvacante);
-          });
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+            child: const Text('Postularse',
+                style: TextStyle(color: Colors.white, fontSize: 18)),
+          ));
     });
   }
 
@@ -239,7 +379,7 @@ class _DescripcionState extends State<Descripcion> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: const Text('Error'),
+                  title: const Text('Nueva postulación'),
                   content: const Text('Se ha postulado a la vacante'),
                   actions: <Widget>[
                     MaterialButton(

@@ -89,6 +89,7 @@ class _DescripcionPOSTState extends State<DescripcionPOST> {
                     : controladorusuario.getUsuarios!.length,
                 itemBuilder: (context, posicion) {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(40),
@@ -208,17 +209,22 @@ class _DescripcionPOSTState extends State<DescripcionPOST> {
                           ),
                         ),
                       ),
-                      _bottonPostularse(
-                          controladorusuario.getUsuarios![posicion].foto,
-                          controladorusuario.getUsuarios![posicion].nombres,
-                          controladorusuario.getUsuarios![posicion].tipousuario,
-                          controladorusuario.getUsuarios![posicion].correo,
-                          controladorusuario.getUsuarios![posicion].contrasena,
-                          controladorusuario.getUsuarios![posicion].telefono,
-                          controladorusuario.getUsuarios![posicion].ciudad,
-                          controladorusuario.getUsuarios![posicion].cv,
-                          controladorusuario.getUsuarios![posicion].userid,
-                          widget.idvacante)
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: _bottondejarPostularse(
+                            controladorusuario.getUsuarios![posicion].foto,
+                            controladorusuario.getUsuarios![posicion].nombres,
+                            controladorusuario
+                                .getUsuarios![posicion].tipousuario,
+                            controladorusuario.getUsuarios![posicion].correo,
+                            controladorusuario
+                                .getUsuarios![posicion].contrasena,
+                            controladorusuario.getUsuarios![posicion].telefono,
+                            controladorusuario.getUsuarios![posicion].ciudad,
+                            controladorusuario.getUsuarios![posicion].cv,
+                            controladorusuario.getUsuarios![posicion].userid,
+                            widget.idvacante),
+                      )
                     ],
                   );
                 })
@@ -241,7 +247,7 @@ class _DescripcionPOSTState extends State<DescripcionPOST> {
     );
   }
 
-  Widget _bottonPostularse(
+  Widget _bottondejarPostularse(
       String foto,
       String nombres,
       String tipousuario,

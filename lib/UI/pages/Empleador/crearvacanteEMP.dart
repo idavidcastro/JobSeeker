@@ -94,7 +94,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       /////AQUI
                       cursorColor: Colors.black,
@@ -124,7 +124,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       /////AQUI
                       cursorColor: Colors.black,
@@ -154,7 +154,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       /////AQUI
                       cursorColor: Colors.black,
@@ -184,7 +184,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       maxLines: 3,
                       cursorColor: Colors.black,
@@ -214,7 +214,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       maxLines: 3,
                       cursorColor: Colors.black,
@@ -244,7 +244,7 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: TextFormField(
                       cursorColor: Colors.black,
                       keyboardType: TextInputType.text,
@@ -272,24 +272,28 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 5),
-                child: DropdownButton(
-                  borderRadius: BorderRadius.circular(20.0),
-                  isExpanded: true,
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
-                  value: valueChoose,
-                  icon: const Icon(Icons.location_city),
-                  underline: Container(
-                    height: 4,
-                    width: 30,
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  child: DropdownButton(
+                    borderRadius: BorderRadius.circular(20.0),
+                    isExpanded: true,
+                    style: const TextStyle(fontSize: 15, color: Colors.black),
+                    value: valueChoose,
+                    icon: const Icon(Icons.location_city),
+                    underline: Container(
+                      height: 4,
+                      width: 30,
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        valueChoose = value;
+                      });
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem(value: value, child: Text(value));
+                    }).toList(),
                   ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      valueChoose = value;
-                    });
-                  },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem(value: value, child: Text(value));
-                  }).toList(),
                 ),
               ),
               Padding(
@@ -315,56 +319,6 @@ class _AdicionarVacantesState extends State<AdicionarVacantes> {
                   }).toList(),
                 ),
               ),
-              /*
-              Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: MaterialButton(
-                  elevation: 10.0,
-                  onPressed: () {
-                    if (controlidvacante.text.isNotEmpty &&
-                        controlempresa.text.isNotEmpty &&
-                        controlCargo.text.isNotEmpty &&
-                        controldescripcion.text.isNotEmpty &&
-                        controlrequisitos.text.isNotEmpty &&
-                        controlSalario.text.isNotEmpty) {
-                      //var nombre = getName();
-                      //print(nombre);
-
-                      crearvacantes();
-                      limpiar();
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                title: const Text('Error'),
-                                content: const Text('Registre los campos'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {});
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Ok',
-                                        style: TextStyle(color: Colors.black),
-                                      ))
-                                ],
-                              ));
-                    }
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  highlightElevation: 20.0,
-                  color: Colors.black,
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
-                  child: const Text(
-                    'Crear Vacante',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),*/
             ],
           ),
         ));

@@ -71,24 +71,24 @@ class _BienvenidaState extends State<Bienvenida> {
       } catch (e) {}
     }
 
-    return RefreshIndicator(
-      backgroundColor: Colors.black,
-      color: Colors.white,
-      strokeWidth: 3,
-      edgeOffset: 0,
-      onRefresh: () {
-        setState(() {});
-        return Future<void>.delayed(const Duration(seconds: 2));
-      },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: const Text('MIS POSTULACIONES'),
-            backgroundColor: Colors.black,
-          ),
-          body: Obx(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: const Text('MIS POSTULACIONES'),
+          backgroundColor: Colors.black,
+        ),
+        body: RefreshIndicator(
+          backgroundColor: Colors.black,
+          color: Colors.white,
+          strokeWidth: 3,
+          edgeOffset: 0,
+          onRefresh: () {
+            setState(() {});
+            return Future<void>.delayed(const Duration(seconds: 2));
+          },
+          child: Obx(
             () => controladorpostulacion.getPostulacion?.isEmpty == false
                 ? ListView.builder(
                     itemCount:

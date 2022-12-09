@@ -87,33 +87,125 @@ class _DescripcionEMPState extends State<DescripcionEMP> {
             },
             child: const Icon(Icons.edit),
           ),
-          body: Column(children: [
-            const Padding(padding: EdgeInsets.all(20.0)),
-            const Text('ID VACANTE ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            const Padding(padding: EdgeInsets.all(5.0)),
-            Text(
-              widget.idvacante,
-              style: const TextStyle(fontSize: 18.0),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(40),
+                  child: Container(
+                    width: 500,
+                    height: 500,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: const <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 8.0,
+                        )
+                      ],
+                      //border: Border.all(color: Colors.black, width: 6.0)
+                    ),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                children: [
+                                  const Text('Empresa: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.empresa,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  const Text('Cargo: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.cargo,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  const Text('Descripción: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.descripcion,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  const Text('Requisitos: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.requisitos,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  const Text('Salario: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.salario,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  const Text('Ciudad: ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(widget.ciudad,
+                                        style: const TextStyle(fontSize: 16.0)),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                            ]),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const Padding(padding: EdgeInsets.all(10.0)),
-            const Text('EMPRESA ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(widget.empresa, style: const TextStyle(fontSize: 18.0)),
-            const Padding(padding: EdgeInsets.all(10.0)),
-            const Text(' CARGO ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(widget.cargo, style: const TextStyle(fontSize: 18.0)),
-            const Padding(padding: EdgeInsets.all(10.0)),
-            const Text('SALARIO ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(widget.salario, style: const TextStyle(fontSize: 18.0)),
-            const Padding(padding: EdgeInsets.all(10.0)),
-            const Text('CIUDAD ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(widget.ciudad, style: const TextStyle(fontSize: 18.0)),
-            const Padding(padding: EdgeInsets.all(25.0))
-          ]),
+          ),
         ),
       ),
 

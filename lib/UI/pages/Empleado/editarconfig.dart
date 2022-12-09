@@ -34,9 +34,11 @@ class _EditarConfigState extends State<EditarConfig> {
   TextEditingController controlcontrasena = TextEditingController();
   TextEditingController controltipousuario = TextEditingController();
   TextEditingController controlcorreoelectronico = TextEditingController();
+
   Controllerauthf controlf = Get.find();
   final firebase = FirebaseFirestore.instance;
   final fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+
   var _image;
 
   _camGaleria(bool op) async {
@@ -58,200 +60,192 @@ class _EditarConfigState extends State<EditarConfig> {
           backgroundColor: Colors.black,
           title: const Text('EDITAR INFORMACIÓN'),
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          child: const Icon(Icons.check),
+          onPressed: () {
+            actualizarPerfil();
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: const Text('Actualización'),
+                      content: const Text('Se ha actualizado el perfil'),
+                      actions: <Widget>[
+                        MaterialButton(
+                          child: const Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ));
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () async {
-                      _opcioncamara(context);
-                    },
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.black,
-                      child: _image != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(48),
-                              child: Image.file(
-                                _image,
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () async {
+                        _opcioncamara(context);
+                      },
+                      child: CircleAvatar(
+                        radius: 65,
+                        backgroundColor: Colors.black,
+                        child: _image != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(48),
+                                child: Image.file(
+                                  _image,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(48),
+                                ),
                                 width: 100,
                                 height: 100,
-                                fit: BoxFit.fitHeight,
+                                child: const Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: Colors.white,
+                                ),
                               ),
-                            )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(48),
-                              ),
-                              width: 100,
-                              height: 100,
-                              child: const Icon(
-                                Icons.camera_alt_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextFormField(
-                  controller: controlnombres,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Nombre completo de usuario o compañía',
-                      icon: const Icon(Icons.person_add_alt_1_outlined),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlnombres.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextFormField(
-                  controller: controlcorreoelectronico,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Correo electronico',
-                      icon: const Icon(Icons.message),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controlcorreoelectronico.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: controltelefono,
-                  decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Teléfono',
-                      icon: const Icon(Icons.phone),
-                      // suffix: Icon(Icons.access_alarm),
-                      suffix: GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          controltelefono.clear();
-                        },
-                      )
-                      //probar suffix
-                      ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 20),
-                child: DropdownButton(
-                  value: valueChooseCiudades,
-                  onChanged: (String? value) {
-                    setState(() {
-                      valueChooseCiudades = value;
-                    });
-                  },
-                  items: listCiudades
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem(value: value, child: Text(value));
-                  }).toList(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 15, 50, 20),
-                child: MaterialButton(
-                  elevation: 10.0,
-                  onPressed: () {
-                    /*
-                    if (controlcontrasena.text.isNotEmpty &&
-                        controlnombres.text.isNotEmpty &&
-                        controltelefono.text.isNotEmpty &&
-                        controlcorreoelectronico.text.isNotEmpty) {
-                      controlf
-                          .registrarEmail(controlcorreoelectronico.text,
-                              controlcontrasena.text, valueChoose.toString())
-                          .then((value) {
-                        if (controlf.emailf != 'Sin registro') {
-                          registrarUserProfile(controlf.uid);
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text('Nuevo Usuario'),
-                                    content:
-                                        const Text('Usuario nuevo registrado'),
-                                    actions: <Widget>[
-                                      MaterialButton(
-                                        child: const Text('Ok'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ));
-                          limpiar();
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text('Error'),
-                                    content: const Text(
-                                        'El usuario ya está registrado con este correo'),
-                                    actions: <Widget>[
-                                      MaterialButton(
-                                        child: const Text('Ok'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ));
-                        }
-                      }).catchError((onError) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  title: const Text('Error'),
-                                  content: const Text(
-                                      'El usuario ya está registrado con este correo'),
-                                  actions: <Widget>[
-                                    MaterialButton(
-                                      child: const Text('Ok'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                ));
-                      });
-                    }*/
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  highlightElevation: 20.0,
-                  color: Colors.black,
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
-                  child: const Text(
-                    'Actualizar',
-                    style: TextStyle(fontSize: 18),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.text,
+                        controller: controlnombres,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 5),
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                            color: Colors.black,
+                          ),
+                          suffix: GestureDetector(
+                            child: const Padding(
+                              padding: EdgeInsets.all(7),
+                              child: Icon(Icons.close),
+                            ),
+                            onTap: () {
+                              controlnombres.clear();
+                            },
+                          ),
+                          labelText: 'Nombre completo de usuario o compañía',
+                        ),
+                        onChanged: (value) {}),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.text,
+                        controller: controlcorreoelectronico,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 5),
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          suffix: GestureDetector(
+                            child: const Padding(
+                              padding: EdgeInsets.all(7),
+                              child: Icon(Icons.close),
+                            ),
+                            onTap: () {
+                              controlcorreoelectronico.clear();
+                            },
+                          ),
+                          labelText: 'Correo electronico',
+                        ),
+                        onChanged: (value) {}),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: TextFormField(
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.number,
+                        controller: controltelefono,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 5),
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(
+                            Icons.phone,
+                            color: Colors.black,
+                          ),
+                          suffix: GestureDetector(
+                            child: const Padding(
+                              padding: EdgeInsets.all(7),
+                              child: Icon(Icons.close),
+                            ),
+                            onTap: () {
+                              controltelefono.clear();
+                            },
+                          ),
+                          labelText: 'Teléfono',
+                        ),
+                        onChanged: (value) {}),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: DropdownButton(
+                      isExpanded: true,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      value: valueChooseCiudades,
+                      onChanged: (String? value) {
+                        setState(() {
+                          valueChooseCiudades = value;
+                        });
+                      },
+                      items: listCiudades
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem(
+                            value: value, child: Text(value));
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Center(
+                    child: Icon(
+                      Icons.document_scanner,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -283,6 +277,30 @@ class _EditarConfigState extends State<EditarConfig> {
             ),
           );
         });
+  }
+
+  actualizarPerfil() async {
+    print(_image);
+    var url = '';
+    if (_image != null) {
+      url = await cargarfoto(_image, controlf.uid);
+    }
+
+    try {
+      //crear postulacion para empleado
+      await firebase.collection('Usuarios').doc(controlf.uid).update({
+        "foto": url,
+        "nombres": controlnombres.text,
+        "correo": controlcorreoelectronico.text,
+        "telefono": controltelefono.text,
+        "ciudad": valueChooseCiudades,
+        "cv": ''
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error...' + e.toString());
+      }
+    }
   }
 
   limpiar() {
